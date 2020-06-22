@@ -1,0 +1,38 @@
+---
+title: "wide-to-condensed"
+description: |
+  Converting data from wide to condensed
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r pkg, message=FALSE}
+# packages used in this walkthrough
+library(tidyverse) 
+
+# the tidyverse is a metapackage that loads a suite of tools
+# useful for working with and summarising data
+
+```
+
+
+Let's get some data to work with.
+
+This data comes from 
+
+> todo
+
+```{r}
+
+# import data
+example_dat <- 
+  read_csv("data-raw/Haddawayetal2018bufferstrips.csv")
+
+```
+

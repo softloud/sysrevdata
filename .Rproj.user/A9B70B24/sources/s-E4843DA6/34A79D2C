@@ -3,19 +3,22 @@
     "path": "~/Documents/repos/sysrevdata/_site.yml",
     "project_path": "_site.yml",
     "type": "yaml",
-    "hash": "1836036031",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1592811427058.0,
     "source_on_save": false,
     "relative_order": 3,
-    "properties": {},
+    "properties": {
+        "cursorPosition": "10,25",
+        "scrollLine": "0"
+    },
     "folds": "",
-    "lastKnownWriteTime": 1592811423,
+    "lastKnownWriteTime": 1592812456,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1592811423,
+    "last_content_update": 1592812456388,
     "read_only": false,
     "read_only_alternatives": []
 }
