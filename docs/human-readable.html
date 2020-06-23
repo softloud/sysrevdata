@@ -19,34 +19,32 @@
  <!--/radix_placeholder_import_source-->
 
   <!--radix_placeholder_meta_tags-->
-  <title>sysrevdata: Keeping it Tidy</title>
+  <title>sysrevdata: wide-to-condensed</title>
 
-  <meta property="description" itemprop="description" content="Structuring evidence synthesis data for accessibility, extensibility, and interoperability"/>
+  <meta property="description" itemprop="description" content="Structuring data for humans"/>
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2020-06-22"/>
-  <meta property="article:created" itemprop="dateCreated" content="2020-06-22"/>
-  <meta name="article:author" content="Charles T. Gray"/>
-  <meta name="article:author" content="Neal Haddaway"/>
+  <meta property="article:published" itemprop="datePublished" content="2020-06-23"/>
+  <meta property="article:created" itemprop="dateCreated" content="2020-06-23"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="sysrevdata: Keeping it Tidy"/>
+  <meta property="og:title" content="sysrevdata: wide-to-condensed"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Structuring evidence synthesis data for accessibility, extensibility, and interoperability"/>
+  <meta property="og:description" content="Structuring data for humans"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="sysrevdata"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="sysrevdata: Keeping it Tidy"/>
-  <meta property="twitter:description" content="Structuring evidence synthesis data for accessibility, extensibility, and interoperability"/>
+  <meta property="twitter:title" content="sysrevdata: wide-to-condensed"/>
+  <meta property="twitter:description" content="Structuring data for humans"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Keeping it Tidy"]},{"type":"character","attributes":{},"value":["Structuring evidence synthesis data for accessibility, extensibility, and interoperability\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Charles T. Gray"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Neal Haddaway"]}]}]},{"type":"character","attributes":{},"value":["2020-06-22"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["wide-to-condensed"]},{"type":"character","attributes":{},"value":["Structuring data for humans\n"]},{"type":"character","attributes":{},"value":["2020-06-23"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1288,7 +1286,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Keeping it Tidy","description":"Structuring evidence synthesis data for accessibility, extensibility, and interoperability","authors":[{"author":"Charles T. Gray","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#"},{"author":"Neal Haddaway","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2020-06-22T00:00:00.000+10:00","citationText":"Gray & Haddaway, 2020"}
+{"title":"wide-to-condensed","description":"Structuring data for humans","authors":[],"publishedDate":"2020-06-23T00:00:00.000+10:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1304,8 +1302,8 @@ walkthroughs
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<a href="tidy.html">tidy</a>
-<a href="wide-to-condensed.html">wide-to-condensed</a>
+<a href="human-readable.html">humans</a>
+<a href="machine-readable.html">machines</a>
 </div>
 </div>
 </div>
@@ -1321,20 +1319,218 @@ walkthroughs
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Keeping it Tidy</h1>
-<p><p>Structuring evidence synthesis data for accessibility, extensibility, and interoperability</p></p>
+<h1>wide-to-condensed</h1>
+<p><p>Structuring data for humans</p></p>
 </div>
 
-<div class="d-byline">
-  Charles T. Gray  
-  
-,   Neal Haddaway  
-  
-<br/>2020-06-22
-</div>
 
 <div class="d-article">
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# packages used in this walkthrough
+library(tidyverse) # all purpose cleaner
+library(janitor) # clean_names for snake_case
+library(skimr) # skim to summarise data
+library(conflicted)
 
+conflict_prefer(&quot;filter&quot;, &quot;dplyr&quot;)
+
+# the tidyverse is a metapackage that loads a suite of tools
+# useful for working with and summarising data</code></pre>
+</div>
+<aside>
+If not already installed, run <code>install.packages("package name")</code> in the console before beginning.
+</aside>
+<p>Let’s get some data to work with.</p>
+<blockquote>
+<p>todo replace with scraping from googlesheets</p>
+</blockquote>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="bash"><code>
+# data we want are in data-raw
+ls data-raw/
+</code></pre>
+<pre><code>
+CEE validation reviews.xlsx
+Haddawayetal2018bufferstrips.csv</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# import data
+example_dat &lt;- 
+  read_csv(&quot;data-raw/Haddawayetal2018bufferstrips.csv&quot;) %&gt;% 
+  # clean variables names to snake_case
+  clean_names()</code></pre>
+</div>
+<aside>
+<p>This data comes from</p>
+<blockquote>
+<p>todo</p>
+</blockquote>
+</aside>
+<p>Inspecting large datasets can slow your machine down, so best to check dimensions before beginning to work with data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+example_dat %&gt;%
+   dim()</code></pre>
+<pre><code>
+[1] 1072   84</code></pre>
+</div>
+<p>With 1072 rows and 84 columns, this is not so big that we can’t inspect it.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# inspect data 
+example_dat %&gt;% 
+  View()</code></pre>
+</div>
+<p>We can also use summary tools, such as <code>skimr::skim</code>.</p>
+<blockquote>
+<p>todo footnote about nomenclature</p>
+</blockquote>
+<p>Running the following command in the console, we note a number of variables with only one unique (<code>n_unique</code>).</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+skim(example_dat)</code></pre>
+</div>
+<p>Since the <code>skimr::skim</code> summary table is a dataframe, we can identify what these variables are.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+example_dat %&gt;% 
+  # summarise
+  skim() %&gt;%
+  # extract variables with only one unique character string in the column
+  filter(character.n_unique == 1) %&gt;% 
+  # output name of variable from skim
+  pluck(&quot;skim_variable&quot;) </code></pre>
+<pre><code>
+ [1] &quot;studydesign_observational&quot;            
+ [2] &quot;studydesign_manipulative&quot;             
+ [3] &quot;spatialscale_plot&quot;                    
+ [4] &quot;spatialscale_field&quot;                   
+ [5] &quot;spatialscale_farm&quot;                    
+ [6] &quot;spatialscale_catchment&quot;               
+ [7] &quot;spatialscale_regional&quot;                
+ [8] &quot;spatialscale_notdescribed&quot;            
+ [9] &quot;measurementquarter_q1&quot;                
+[10] &quot;measurementquarter_q2&quot;                
+[11] &quot;measurementquarter_q3&quot;                
+[12] &quot;measurementquarter_q4&quot;                
+[13] &quot;measurementquarter_notdescribed&quot;      
+[14] &quot;farmingsystem_conventional&quot;           
+[15] &quot;farmingsystem_organic&quot;                
+[16] &quot;farmingsystem_notdescribed&quot;           
+[17] &quot;farmingproductionsystem_livestock&quot;    
+[18] &quot;farmingproductionsystem_croppedfields&quot;
+[19] &quot;farmingproductionsystem_horticulture&quot; 
+[20] &quot;farmingproductionsystem_viticulture&quot;  
+[21] &quot;farmingproductionsystem_fruit&quot;        
+[22] &quot;farmingproductionsystem_grassland&quot;    
+[23] &quot;farmingproductionsystem_other&quot;        
+[24] &quot;farmingproductionsystem_notdescribed&quot; 
+[25] &quot;vegetationtype_grasses&quot;               
+[26] &quot;vegetationtype_wildflowers&quot;           
+[27] &quot;vegetationtype_shrubs&quot;                
+[28] &quot;vegetationtype_hedgerow&quot;              
+[29] &quot;vegetationtype_trees&quot;                 
+[30] &quot;vegetationtype_other&quot;                 
+[31] &quot;vegetationtype_notdescribed&quot;          
+[32] &quot;striplocation_withinfield&quot;            
+[33] &quot;striplocation_fieldedge&quot;              
+[34] &quot;striplocation_riparian&quot;               
+[35] &quot;striplocation_notdescribed&quot;           
+[36] &quot;stripmanagement_unmanaged&quot;            
+[37] &quot;stripmanagement_soilamendment&quot;        
+[38] &quot;stripmanagement_soildisturbed&quot;        
+[39] &quot;stripmanagement_cut&quot;                  
+[40] &quot;stripmanagement_grazed&quot;               
+[41] &quot;stripmanagement_harvested&quot;            
+[42] &quot;stripmanagement_sownplanted&quot;          
+[43] &quot;stripmanagement_pesticide&quot;            
+[44] &quot;stripmanagement_managedother&quot;         
+[45] &quot;stripmanagement_notdescribed&quot;         </code></pre>
+</div>
+<p>We can see a pattern of groupings by prefix. Now we inspect each variable.</p>
+<h2 id="study-design">study design</h2>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# take a look at the study design columns
+example_dat %&gt;% 
+  select(contains(&quot;studydesign&quot;))</code></pre>
+<pre><code>
+# A tibble: 1,072 x 2
+   studydesign_observational studydesign_manipulative
+   &lt;chr&gt;                     &lt;chr&gt;                   
+ 1 Observational             &lt;NA&gt;                    
+ 2 Observational             &lt;NA&gt;                    
+ 3 Observational             &lt;NA&gt;                    
+ 4 &lt;NA&gt;                      Manipulative            
+ 5 &lt;NA&gt;                      Manipulative            
+ 6 &lt;NA&gt;                      Manipulative            
+ 7 Observational             &lt;NA&gt;                    
+ 8 Observational             &lt;NA&gt;                    
+ 9 Observational             &lt;NA&gt;                    
+10 Observational             &lt;NA&gt;                    
+# … with 1,062 more rows</code></pre>
+</div>
+<p>We see at least the top of the data is split with one indication in <code>studydesign_observational</code></p>
+<p>First, we check our assumption that there are never strings in both columns.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# check assumption that variable is encoded across
+# two columns
+example_dat %&gt;% 
+  select(contains(&quot;studydesign&quot;)) %&gt;% 
+  filter(
+    !( # which rows do not meet these assumptions
+      
+      # na in observational and manipulative string
+      (is.na(studydesign_observational) &amp; 
+        studydesign_manipulative == &quot;Manipulative&quot;) | # or
+        
+        # na in manipulative &amp; observational sring
+        (is.na(studydesign_manipulative) &amp; studydesign_observational == &quot;Observational&quot;)
+    )
+  )</code></pre>
+<pre><code>
+# A tibble: 6 x 2
+  studydesign_observational studydesign_manipulative
+  &lt;chr&gt;                     &lt;chr&gt;                   
+1 Observational             Manipulative            
+2 Observational             Manipulative            
+3 Observational             Manipulative            
+4 Observational             Manipulative            
+5 Observational             Manipulative            
+6 Observational             Manipulative            </code></pre>
+</div>
+<p>The data are not <em>quite</em> as expected. There are three levels to a condensed <code>studydesign</code> variable: observational, manipulative, and <em>both</em> observational and manipulative.</p>
+<p>Since we know the structure of all the data now, one way to condense these two columns would be via concatenating the variables.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+example_dat %&gt;%
+  select(contains(&quot;studydesign&quot;)) %&gt;%
+  unite(
+    col = &quot;studydesign&quot;,
+    studydesign_observational,
+    studydesign_manipulative,
+    sep = &quot;;&quot;,
+    na.rm = TRUE
+  )</code></pre>
+<pre><code>
+# A tibble: 1,072 x 1
+   studydesign  
+   &lt;chr&gt;        
+ 1 Observational
+ 2 Observational
+ 3 Observational
+ 4 Manipulative 
+ 5 Manipulative 
+ 6 Manipulative 
+ 7 Observational
+ 8 Observational
+ 9 Observational
+10 Observational
+# … with 1,062 more rows</code></pre>
+</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

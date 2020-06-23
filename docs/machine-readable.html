@@ -19,32 +19,34 @@
  <!--/radix_placeholder_import_source-->
 
   <!--radix_placeholder_meta_tags-->
-  <title>sysrevdata: wide-to-condensed</title>
+  <title>sysrevdata: Keeping it Tidy</title>
 
-  <meta property="description" itemprop="description" content="Converting data from wide to condensed"/>
+  <meta property="description" itemprop="description" content="Structuring evidence synthesis data for machines"/>
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2020-06-22"/>
-  <meta property="article:created" itemprop="dateCreated" content="2020-06-22"/>
+  <meta property="article:published" itemprop="datePublished" content="2020-06-23"/>
+  <meta property="article:created" itemprop="dateCreated" content="2020-06-23"/>
+  <meta name="article:author" content="Charles T. Gray"/>
+  <meta name="article:author" content="Neal Haddaway"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="sysrevdata: wide-to-condensed"/>
+  <meta property="og:title" content="sysrevdata: Keeping it Tidy"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Converting data from wide to condensed"/>
+  <meta property="og:description" content="Structuring evidence synthesis data for machines"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="sysrevdata"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="sysrevdata: wide-to-condensed"/>
-  <meta property="twitter:description" content="Converting data from wide to condensed"/>
+  <meta property="twitter:title" content="sysrevdata: Keeping it Tidy"/>
+  <meta property="twitter:description" content="Structuring evidence synthesis data for machines"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["wide-to-condensed"]},{"type":"character","attributes":{},"value":["Converting data from wide to condensed\n"]},{"type":"character","attributes":{},"value":["2020-06-22"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Keeping it Tidy"]},{"type":"character","attributes":{},"value":["Structuring evidence synthesis data for machines\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Charles T. Gray"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Neal Haddaway"]}]}]},{"type":"character","attributes":{},"value":["2020-06-23"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1286,7 +1288,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"wide-to-condensed","description":"Converting data from wide to condensed","authors":[],"publishedDate":"2020-06-22T00:00:00.000+10:00"}
+{"title":"Keeping it Tidy","description":"Structuring evidence synthesis data for machines","authors":[{"author":"Charles T. Gray","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#"},{"author":"Neal Haddaway","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2020-06-23T00:00:00.000+10:00","citationText":"Gray & Haddaway, 2020"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1302,8 +1304,8 @@ walkthroughs
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<a href="tidy.html">tidy</a>
-<a href="wide-to-condensed.html">wide-to-condensed</a>
+<a href="human-readable.html">humans</a>
+<a href="machine-readable.html">machines</a>
 </div>
 </div>
 </div>
@@ -1319,30 +1321,24 @@ walkthroughs
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>wide-to-condensed</h1>
-<p><p>Converting data from wide to condensed</p></p>
+<h1>Keeping it Tidy</h1>
+<p><p>Structuring evidence synthesis data for machines</p></p>
 </div>
 
+<div class="d-byline">
+  Charles T. Gray  
+  
+,   Neal Haddaway  
+  
+<br/>2020-06-23
+</div>
 
 <div class="d-article">
 <div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-# packages used in this walkthrough
-library(tidyverse) 
 
-# the tidyverse is a metapackage that loads a suite of tools
-# useful for working with and summarising data</code></pre>
 </div>
-<p>Let’s get some data to work with.</p>
-<p>This data comes from</p>
-<blockquote>
-<p>todo</p>
-</blockquote>
 <div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-# import data
-example_dat &lt;- 
-  read_csv(&quot;data-raw/Haddawayetal2018bufferstrips.csv&quot;)</code></pre>
+
 </div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

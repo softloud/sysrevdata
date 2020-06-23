@@ -1,7 +1,7 @@
 ---
 title: "wide-to-condensed"
 description: |
-  Converting data from wide to condensed
+  Structuring data for humans
 date: "`r Sys.Date()`"
 output: distill::distill_article
 ---
@@ -11,22 +11,34 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
 ```{r pkg, message=FALSE}
 # packages used in this walkthrough
 library(tidyverse) 
 
 # the tidyverse is a metapackage that loads a suite of tools
 # useful for working with and summarising data
-
 ```
+<aside>
+If not already installed, run `install.packages("package name")` in the console before beginning.
+</aside>
 
 
 Let's get some data to work with.
 
+
+```{bash}
+# data we want are in data-raw
+ls data-raw/
+
+```
+<aside>
 This data comes from 
 
 > todo
+
+</aside>
+
+
 
 ```{r}
 
@@ -34,5 +46,20 @@ This data comes from
 example_dat <- 
   read_csv("data-raw/Haddawayetal2018bufferstrips.csv")
 
+```
+
+Inspecting large datasets can slow your machine down, so best to check dimensions before beginning to work with data.
+
+```{r}
+dim_dat <- 
+  example_dat %>% 
+  dim()
+```
+
+With `r dim_dat[1]` rows and `r dim_dat[2]` columns, this is not so big that we can't inspect it. 
+
+```{r eval=FALSE}
+example_dat %>% 
+  View()
 ```
 
