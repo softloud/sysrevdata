@@ -98,7 +98,7 @@ example_dat %>%
 
 ```
 
-We can see a pattern of groupings by prefix. Now we inspect each variable. 
+We can see a pattern of groupings by prefix. Now we inspect one variable: the data prefixed with `studydesign`. 
 
 ## study design
 
