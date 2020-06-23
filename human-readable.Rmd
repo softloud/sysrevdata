@@ -17,8 +17,8 @@ library(tidyverse) # all purpose cleaner
 library(janitor) # clean_names for snake_case
 library(skimr) # skim to summarise data
 library(conflicted)
-
 conflict_prefer("filter", "dplyr")
+library(kableExtra)
 
 # the tidyverse is a metapackage that loads a suite of tools
 # useful for working with and summarising data
@@ -138,16 +138,53 @@ The data are not _quite_ as expected. There are three levels to a condensed `stu
 Since we know the structure of all the data now, one way to condense these two columns would be via concatenating the variables.
 
 ```{r}
-example_dat %>%
-  select(contains("studydesign")) %>%
+study_design <- 
+  example_dat %>%
+  # for this example
+  select(contains("studydesign")) %>% 
   unite(
-    col = "studydesign",
-    studydesign_observational,
-    studydesign_manipulative,
-    sep = ";",
+    col = "study_design",
+    contains("studydesign"),
+    sep = "; ",
     na.rm = TRUE
-  )
+  ) 
+
+# top of studydesign
+study_design
+
+# check the two-value columns
+study_design %>% 
+  filter(str_length(study_design) > str_length("Observational"))
 
 ```
 
+## if we're happy to do this with all variables
+
+```{r}
+condense_readable <-
+  function(dat, variable) {
+    unite(dat, col = !!variable, contains(!!variable), na.rm = TRUE)
+  }
+
+```
+
+```{r}
+# condense all
+
+condensed_data <- 
+  example_dat %>% 
+  condense_readable("studydesign") %>% 
+  condense_readable("spatialscale") %>% 
+  condense_readable("measurement") %>% 
+  condense_readable("farmingsystem") %>% 
+  condense_readable("farmingproductionsystem") %>% 
+  condense_readable("vegetationtype") %>% 
+  condense_readable("striplocation") %>% 
+  condense_readable("stripmanagement") 
+
+# take a look at our condensed variables
+condensed_data %>% 
+  select(studydesign, spatialscale, measurement, farmingsystem, farmingproductionsystem, vegetationtype, striplocation, stripmanagement)
+
+```
 

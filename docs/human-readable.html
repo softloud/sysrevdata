@@ -1332,8 +1332,8 @@ library(tidyverse) # all purpose cleaner
 library(janitor) # clean_names for snake_case
 library(skimr) # skim to summarise data
 library(conflicted)
-
 conflict_prefer(&quot;filter&quot;, &quot;dplyr&quot;)
+library(kableExtra)
 
 # the tidyverse is a metapackage that loads a suite of tools
 # useful for working with and summarising data</code></pre>
@@ -1506,18 +1506,22 @@ example_dat %&gt;%
 <p>Since we know the structure of all the data now, one way to condense these two columns would be via concatenating the variables.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
-example_dat %&gt;%
-  select(contains(&quot;studydesign&quot;)) %&gt;%
+study_design &lt;- 
+  example_dat %&gt;%
+  # for this example
+  select(contains(&quot;studydesign&quot;)) %&gt;% 
   unite(
-    col = &quot;studydesign&quot;,
-    studydesign_observational,
-    studydesign_manipulative,
-    sep = &quot;;&quot;,
+    col = &quot;study_design&quot;,
+    contains(&quot;studydesign&quot;),
+    sep = &quot;; &quot;,
     na.rm = TRUE
-  )</code></pre>
+  ) 
+
+# top of studydesign
+study_design</code></pre>
 <pre><code>
 # A tibble: 1,072 x 1
-   studydesign  
+   study_design 
    &lt;chr&gt;        
  1 Observational
  2 Observational
@@ -1530,6 +1534,63 @@ example_dat %&gt;%
  9 Observational
 10 Observational
 # … with 1,062 more rows</code></pre>
+<pre class="r"><code>
+# check the two-value columns
+study_design %&gt;% 
+  filter(str_length(study_design) &gt; str_length(&quot;Observational&quot;))</code></pre>
+<pre><code>
+# A tibble: 6 x 1
+  study_design               
+  &lt;chr&gt;                      
+1 Observational; Manipulative
+2 Observational; Manipulative
+3 Observational; Manipulative
+4 Observational; Manipulative
+5 Observational; Manipulative
+6 Observational; Manipulative</code></pre>
+</div>
+<h2 id="if-were-happy-to-do-this-with-all-variables">if we’re happy to do this with all variables</h2>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+condense_readable &lt;-
+  function(dat, variable) {
+    unite(dat, col = !!variable, contains(!!variable), na.rm = TRUE)
+  }</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# condense all
+
+condensed_data &lt;- 
+  example_dat %&gt;% 
+  condense_readable(&quot;studydesign&quot;) %&gt;% 
+  condense_readable(&quot;spatialscale&quot;) %&gt;% 
+  condense_readable(&quot;measurement&quot;) %&gt;% 
+  condense_readable(&quot;farmingsystem&quot;) %&gt;% 
+  condense_readable(&quot;farmingproductionsystem&quot;) %&gt;% 
+  condense_readable(&quot;vegetationtype&quot;) %&gt;% 
+  condense_readable(&quot;striplocation&quot;) %&gt;% 
+  condense_readable(&quot;stripmanagement&quot;) 
+
+# take a look at our condensed variables
+condensed_data %&gt;% 
+  select(studydesign, spatialscale, measurement, farmingsystem, farmingproductionsystem, vegetationtype, striplocation, stripmanagement)</code></pre>
+<pre><code>
+# A tibble: 1,072 x 8
+   studydesign spatialscale measurement farmingsystem farmingproducti…
+   &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;           
+ 1 Observatio… Catchment s… Q1_Q2       Not described Not described   
+ 2 Observatio… Regional sc… Not descri… Not described Livestock_Cropp…
+ 3 Observatio… Regional sc… Q2_Q3       Conventional… Other (please s…
+ 4 Manipulati… Plot scale   Not descri… Not described Not described   
+ 5 Manipulati… Plot scale   Not descri… Not described Not described   
+ 6 Manipulati… Farm scale   Q2_Q3       Not described Cropped fields …
+ 7 Observatio… Regional sc… Q2_Q3_Q4    Not described Cropped fields …
+ 8 Observatio… Regional sc… Q2_Q3       Not described Cropped fields …
+ 9 Observatio… Regional sc… Q2_Q3       Not described Cropped fields …
+10 Observatio… Regional sc… Not descri… Not described Cropped fields …
+# … with 1,062 more rows, and 3 more variables: vegetationtype &lt;chr&gt;,
+#   striplocation &lt;chr&gt;, stripmanagement &lt;chr&gt;</code></pre>
 </div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
