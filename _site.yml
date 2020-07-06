@@ -6,11 +6,12 @@ output_dir: "docs"
 navbar:
   left:
     - text: "walkthroughs"
-      menu:
-        - text: "humans"
-          href: human-readable.html
-        - text: "machines"
-          href: machine-readable.html
+      href: walkthroughs.html
+      # menu:
+      #   - text: "humans"
+      #     href: human-readable.html
+      #   - text: "machines"
+      #     href: machine-readable.html
   right:
     - text: "sysrevdata"
       href: index.html

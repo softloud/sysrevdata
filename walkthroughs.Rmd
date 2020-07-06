@@ -1,17 +1,13 @@
 ---
-title: "wide-to-condensed"
-description: |
-  Structuring data for humans
-date: "`r Sys.Date()`"
-output: distill::distill_article
+title: "walkthroughs"
+output: 
+  distill::distill_article:
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-```
 
-
-```{r pkg, message=FALSE}
 # packages used in this walkthrough
 library(tidyverse) # all purpose cleaner
 library(janitor) # clean_names for snake_case
@@ -27,37 +23,25 @@ library(kableExtra)
 If not already installed, run `install.packages("package name")` in the console before beginning.
 </aside>
 
+# Get data
 
-Let's get some data to work with.
-
-> todo replace with scraping from googlesheets
-
-```{bash}
-# data we want are in data-raw
-ls data-raw/
-
-```
-
+> todo: set up package & embed website
 
 ```{r}
-
-# import data
 example_dat <- 
-  read_csv("data-raw/Haddawayetal2018bufferstrips.csv") %>% 
+  read_csv("data-raw/Haddawayetal2018bufferstrips.csv",
+           col_types = paste(rep("c",84), collapse = ""),
+            locale = locale(encoding="UTF-8")
+           ) %>% 
   # clean variables names to snake_case
   clean_names()
 
+
 ```
-<aside>
-This data comes from 
 
-> todo
+# Check assumptions about data
 
-</aside>
-
-
-
-Inspecting large datasets can slow your machine down, so best to check dimensions before beginning to work with data.
+Inspecting large datasets can slow your machine down, so best to check dimensions before beginning to work with data. 
 
 ```{r}
 example_dat %>%
@@ -100,7 +84,11 @@ example_dat %>%
 
 We can see a pattern of groupings by prefix. Now we inspect one variable: the data prefixed with `studydesign`. 
 
-## study design
+# Wide to narrative (condensed)
+
+To produce a narrative table, we take data 
+
+## Condensing one variable
 
 ```{r}
 # take a look at the study design columns
@@ -158,12 +146,12 @@ study_design %>%
 
 ```
 
-## if we're happy to do this with all variables
+## Condensing all wide variables
 
 ```{r}
 condense_readable <-
   function(dat, variable) {
-    unite(dat, col = !!variable, contains(!!variable), na.rm = TRUE)
+    unite(dat, col = {{variable}}, contains({{variable}}), na.rm = TRUE)
   }
 
 ```
@@ -183,8 +171,31 @@ condensed_data <-
   condense_readable("stripmanagement") 
 
 # take a look at our condensed variables
-condensed_data %>% 
-  select(studydesign, spatialscale, measurement, farmingsystem, farmingproductionsystem, vegetationtype, striplocation, stripmanagement)
+condensed_dat <-
+  condensed_data %>%
+  select(
+    studydesign,
+    spatialscale,
+    measurement,
+    farmingsystem,
+    farmingproductionsystem,
+    vegetationtype,
+    striplocation,
+    stripmanagement
+  )
 
 ```
+
+# Narrative to long
+
+# Long to narrative
+
+
+# Narrative to wide
+
+Suppose, that we begin with condensed data, and wish to structure it for 
+
+# Wide to long
+
+# Long to wide
 

@@ -19,32 +19,26 @@
  <!--/radix_placeholder_import_source-->
 
   <!--radix_placeholder_meta_tags-->
-  <title>sysrevdata: wide-to-condensed</title>
-
-  <meta property="description" itemprop="description" content="Structuring data for humans"/>
+  <title>sysrevdata: walkthroughs</title>
 
 
-  <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2020-06-23"/>
-  <meta property="article:created" itemprop="dateCreated" content="2020-06-23"/>
+
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="sysrevdata: wide-to-condensed"/>
+  <meta property="og:title" content="sysrevdata: walkthroughs"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Structuring data for humans"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="sysrevdata"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="sysrevdata: wide-to-condensed"/>
-  <meta property="twitter:description" content="Structuring data for humans"/>
+  <meta property="twitter:title" content="sysrevdata: walkthroughs"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["wide-to-condensed"]},{"type":"character","attributes":{},"value":["Structuring data for humans\n"]},{"type":"character","attributes":{},"value":["2020-06-23"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","output"]}},"value":[{"type":"character","attributes":{},"value":["walkthroughs"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1286,7 +1280,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"wide-to-condensed","description":"Structuring data for humans","authors":[],"publishedDate":"2020-06-23T00:00:00.000+10:00"}
+{"title":"walkthroughs","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1295,17 +1289,7 @@
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
 <a href="index.html" class="title">sysrevdata</a>
-<div class="nav-dropdown">
-<button class="nav-dropbtn">
-walkthroughs
- 
-<span class="down-arrow">&#x25BE;</span>
-</button>
-<div class="nav-dropdown-content">
-<a href="human-readable.html">humans</a>
-<a href="machine-readable.html">machines</a>
-</div>
-</div>
+<a href="walkthroughs.html">walkthroughs</a>
 </div>
 <div class="nav-right">
 <a href="index.html">sysrevdata</a>
@@ -1319,55 +1303,48 @@ walkthroughs
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>wide-to-condensed</h1>
-<p><p>Structuring data for humans</p></p>
+<h1>walkthroughs</h1>
+
 </div>
 
 
 <div class="d-article">
-<div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-# packages used in this walkthrough
-library(tidyverse) # all purpose cleaner
-library(janitor) # clean_names for snake_case
-library(skimr) # skim to summarise data
-library(conflicted)
-conflict_prefer(&quot;filter&quot;, &quot;dplyr&quot;)
-library(kableExtra)
-
-# the tidyverse is a metapackage that loads a suite of tools
-# useful for working with and summarising data</code></pre>
-</div>
+<h3 class="d-toc-header">Table of Contents</h3>
+<nav class="d-toc" id="TOC">
+<ul>
+<li><a href="#get-data">Get data</a></li>
+<li><a href="#check-assumptions-about-data">Check assumptions about data</a></li>
+<li><a href="#wide-to-narrative-condensed">Wide to narrative (condensed)</a>
+<ul>
+<li><a href="#condensing-one-variable">Condensing one variable</a></li>
+<li><a href="#condensing-all-wide-variables">Condensing all wide variables</a></li>
+</ul></li>
+<li><a href="#narrative-to-long">Narrative to long</a></li>
+<li><a href="#long-to-narrative">Long to narrative</a></li>
+<li><a href="#narrative-to-wide">Narrative to wide</a></li>
+<li><a href="#wide-to-long">Wide to long</a></li>
+<li><a href="#long-to-wide">Long to wide</a></li>
+</ul>
+</nav>
+<hr class="d-toc-separator"/>
 <aside>
 If not already installed, run <code>install.packages("package name")</code> in the console before beginning.
 </aside>
-<p>Let’s get some data to work with.</p>
+<h1 id="get-data">Get data</h1>
 <blockquote>
-<p>todo replace with scraping from googlesheets</p>
+<p>todo: set up package &amp; embed website</p>
 </blockquote>
 <div class="layout-chunk" data-layout="l-body">
-<pre class="bash"><code>
-# data we want are in data-raw
-ls data-raw/
-</code></pre>
-<pre><code>
-CEE validation reviews.xlsx
-Haddawayetal2018bufferstrips.csv</code></pre>
-</div>
-<div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
-# import data
 example_dat &lt;- 
-  read_csv(&quot;data-raw/Haddawayetal2018bufferstrips.csv&quot;) %&gt;% 
+  read_csv(&quot;data-raw/Haddawayetal2018bufferstrips.csv&quot;,
+           col_types = paste(rep(&quot;c&quot;,84), collapse = &quot;&quot;),
+            locale = locale(encoding=&quot;UTF-8&quot;)
+           ) %&gt;% 
   # clean variables names to snake_case
   clean_names()</code></pre>
 </div>
-<aside>
-<p>This data comes from</p>
-<blockquote>
-<p>todo</p>
-</blockquote>
-</aside>
+<h1 id="check-assumptions-about-data">Check assumptions about data</h1>
 <p>Inspecting large datasets can slow your machine down, so best to check dimensions before beginning to work with data.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
@@ -1450,7 +1427,9 @@ example_dat %&gt;%
 [45] &quot;stripmanagement_notdescribed&quot;         </code></pre>
 </div>
 <p>We can see a pattern of groupings by prefix. Now we inspect one variable: the data prefixed with <code>studydesign</code>.</p>
-<h2 id="study-design">study design</h2>
+<h1 id="wide-to-narrative-condensed">Wide to narrative (condensed)</h1>
+<p>To produce a narrative table, we take data</p>
+<h2 id="condensing-one-variable">Condensing one variable</h2>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 # take a look at the study design columns
@@ -1549,12 +1528,12 @@ study_design %&gt;%
 5 Observational; Manipulative
 6 Observational; Manipulative</code></pre>
 </div>
-<h2 id="if-were-happy-to-do-this-with-all-variables">if we’re happy to do this with all variables</h2>
+<h2 id="condensing-all-wide-variables">Condensing all wide variables</h2>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 condense_readable &lt;-
   function(dat, variable) {
-    unite(dat, col = !!variable, contains(!!variable), na.rm = TRUE)
+    unite(dat, col = {{variable}}, contains({{variable}}), na.rm = TRUE)
   }</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -1573,25 +1552,25 @@ condensed_data &lt;-
   condense_readable(&quot;stripmanagement&quot;) 
 
 # take a look at our condensed variables
-condensed_data %&gt;% 
-  select(studydesign, spatialscale, measurement, farmingsystem, farmingproductionsystem, vegetationtype, striplocation, stripmanagement)</code></pre>
-<pre><code>
-# A tibble: 1,072 x 8
-   studydesign spatialscale measurement farmingsystem farmingproducti…
-   &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;           
- 1 Observatio… Catchment s… Q1_Q2       Not described Not described   
- 2 Observatio… Regional sc… Not descri… Not described Livestock_Cropp…
- 3 Observatio… Regional sc… Q2_Q3       Conventional… Other (please s…
- 4 Manipulati… Plot scale   Not descri… Not described Not described   
- 5 Manipulati… Plot scale   Not descri… Not described Not described   
- 6 Manipulati… Farm scale   Q2_Q3       Not described Cropped fields …
- 7 Observatio… Regional sc… Q2_Q3_Q4    Not described Cropped fields …
- 8 Observatio… Regional sc… Q2_Q3       Not described Cropped fields …
- 9 Observatio… Regional sc… Q2_Q3       Not described Cropped fields …
-10 Observatio… Regional sc… Not descri… Not described Cropped fields …
-# … with 1,062 more rows, and 3 more variables: vegetationtype &lt;chr&gt;,
-#   striplocation &lt;chr&gt;, stripmanagement &lt;chr&gt;</code></pre>
+condensed_dat &lt;-
+  condensed_data %&gt;%
+  select(
+    studydesign,
+    spatialscale,
+    measurement,
+    farmingsystem,
+    farmingproductionsystem,
+    vegetationtype,
+    striplocation,
+    stripmanagement
+  )</code></pre>
 </div>
+<h1 id="narrative-to-long">Narrative to long</h1>
+<h1 id="long-to-narrative">Long to narrative</h1>
+<h1 id="narrative-to-wide">Narrative to wide</h1>
+<p>Suppose, that we begin with condensed data, and wish to structure it for</p>
+<h1 id="wide-to-long">Wide to long</h1>
+<h1 id="long-to-wide">Long to wide</h1>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
