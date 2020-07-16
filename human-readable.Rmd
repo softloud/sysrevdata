@@ -163,7 +163,8 @@ study_design %>%
 ```{r}
 condense_readable <-
   function(dat, variable) {
-    unite(dat, col = !!variable, contains(!!variable), na.rm = TRUE)
+    unite(dat, col = !!variable, 
+          contains(!!variable), sep="; ", na.rm = TRUE)
   }
 
 ```
@@ -185,6 +186,12 @@ condensed_data <-
 # take a look at our condensed variables
 condensed_data %>% 
   select(studydesign, spatialscale, measurement, farmingsystem, farmingproductionsystem, vegetationtype, striplocation, stripmanagement)
+
+```
+
+```{r}
+testdat<-condensed_data %>% 
+  unnest(studydesign=strsplit(studydesign, "; "))
 
 ```
 
