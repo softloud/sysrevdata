@@ -1533,14 +1533,14 @@ study_design %&gt;%
 <pre class="r"><code>
 condense_readable &lt;-
   function(dat, variable) {
-    unite(dat, col = {{variable}}, contains({{variable}}), na.rm = TRUE)
+    unite(dat, col = {{variable}}, contains({{variable}}), na.rm = TRUE, sep = &quot;; &quot;)
   }</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 # condense all
 
-condensed_data &lt;- 
+condensed_dat &lt;- 
   example_dat %&gt;% 
   condense_readable(&quot;studydesign&quot;) %&gt;% 
   condense_readable(&quot;spatialscale&quot;) %&gt;% 
@@ -1552,8 +1552,7 @@ condensed_data &lt;-
   condense_readable(&quot;stripmanagement&quot;) 
 
 # take a look at our condensed variables
-condensed_dat &lt;-
-  condensed_data %&gt;%
+condensed_dat %&gt;%
   select(
     studydesign,
     spatialscale,
@@ -1564,8 +1563,43 @@ condensed_dat &lt;-
     striplocation,
     stripmanagement
   )</code></pre>
+<pre><code>
+# A tibble: 1,072 x 8
+   studydesign spatialscale measurement farmingsystem farmingproducti…
+   &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;           
+ 1 Observatio… Catchment s… Q1; Q2      Not described Not described   
+ 2 Observatio… Regional sc… Not descri… Not described Livestock; Crop…
+ 3 Observatio… Regional sc… Q2; Q3      Conventional… Other (please s…
+ 4 Manipulati… Plot scale   Not descri… Not described Not described   
+ 5 Manipulati… Plot scale   Not descri… Not described Not described   
+ 6 Manipulati… Farm scale   Q2; Q3      Not described Cropped fields …
+ 7 Observatio… Regional sc… Q2; Q3; Q4  Not described Cropped fields …
+ 8 Observatio… Regional sc… Q2; Q3      Not described Cropped fields …
+ 9 Observatio… Regional sc… Q2; Q3      Not described Cropped fields …
+10 Observatio… Regional sc… Not descri… Not described Cropped fields …
+# … with 1,062 more rows, and 3 more variables: vegetationtype &lt;chr&gt;,
+#   striplocation &lt;chr&gt;, stripmanagement &lt;chr&gt;</code></pre>
 </div>
 <h1 id="narrative-to-long">Narrative to long</h1>
+<p>Now, if we begin with a narrative table, we may wish to extract specific variables.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+testdat &lt;-
+  condensed_dat %&gt;% 
+  mutate(
+    study_design = map(
+      studydesign,
+      .f = function(text) {
+        tibble(
+          study_design = str_split(text, pattern = &quot;; &quot;)
+        )
+      }
+    ))</code></pre>
+</div>
+<p>If we functionalise this, we can</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
 <h1 id="long-to-narrative">Long to narrative</h1>
 <h1 id="narrative-to-wide">Narrative to wide</h1>
 <p>Suppose, that we begin with condensed data, and wish to structure it for</p>

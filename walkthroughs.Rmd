@@ -151,7 +151,7 @@ study_design %>%
 ```{r}
 condense_readable <-
   function(dat, variable) {
-    unite(dat, col = {{variable}}, contains({{variable}}), na.rm = TRUE)
+    unite(dat, col = {{variable}}, contains({{variable}}), na.rm = TRUE, sep = "; ")
   }
 
 ```
@@ -159,7 +159,7 @@ condense_readable <-
 ```{r}
 # condense all
 
-condensed_data <- 
+condensed_dat <- 
   example_dat %>% 
   condense_readable("studydesign") %>% 
   condense_readable("spatialscale") %>% 
@@ -171,8 +171,7 @@ condensed_data <-
   condense_readable("stripmanagement") 
 
 # take a look at our condensed variables
-condensed_dat <-
-  condensed_data %>%
+condensed_dat %>%
   select(
     studydesign,
     spatialscale,
@@ -187,6 +186,35 @@ condensed_dat <-
 ```
 
 # Narrative to long
+
+Now, if we begin with a narrative table, we may wish to extract specific variables.
+
+```{r}
+
+testdat <-
+  condensed_dat %>% 
+  mutate(
+    study_design = map(
+      studydesign,
+      .f = function(text) {
+        tibble(
+          study_design = str_split(text, pattern = "; ")
+        )
+      }
+    ))
+
+
+```
+
+If we functionalise this, we can 
+
+```{r}
+
+
+
+```
+
+
 
 # Long to narrative
 
