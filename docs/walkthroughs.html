@@ -1582,23 +1582,37 @@ condensed_dat %&gt;%
 </div>
 <h1 id="narrative-to-long">Narrative to long</h1>
 <p>Now, if we begin with a narrative table, we may wish to extract specific variables.</p>
+<p>Condisider, again, <code>studydesign</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
-testdat &lt;-
+studydesign_long &lt;-
   condensed_dat %&gt;% 
-  mutate(
-    study_design = map(
-      studydesign,
-      .f = function(text) {
-        tibble(
-          study_design = str_split(text, pattern = &quot;; &quot;)
-        )
-      }
-    ))</code></pre>
+  unnest(studydesign=strsplit(studydesign, &quot;; &quot;))</code></pre>
 </div>
-<p>If we functionalise this, we can</p>
+<p>For the records that have more than one entry for <code>studydesign</code>,</p>
 <div class="layout-chunk" data-layout="l-body">
-
+<pre class="r"><code>
+condensed_dat %&gt;% count(studydesign)</code></pre>
+<pre><code>
+# A tibble: 3 x 2
+  studydesign                     n
+  &lt;chr&gt;                       &lt;int&gt;
+1 Manipulative                  406
+2 Observational                 660
+3 Observational; Manipulative     6</code></pre>
+<pre class="r"><code>
+studydesign_long %&gt;% dim()</code></pre>
+<pre><code>
+[1] 1078   22</code></pre>
+<pre class="r"><code>
+studydesign_long %&gt;% 
+  count(studydesign)</code></pre>
+<pre><code>
+# A tibble: 2 x 2
+  studydesign       n
+  &lt;chr&gt;         &lt;int&gt;
+1 Manipulative    412
+2 Observational   666</code></pre>
 </div>
 <h1 id="long-to-narrative">Long to narrative</h1>
 <h1 id="narrative-to-wide">Narrative to wide</h1>

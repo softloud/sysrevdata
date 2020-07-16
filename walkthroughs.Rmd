@@ -189,32 +189,27 @@ condensed_dat %>%
 
 Now, if we begin with a narrative table, we may wish to extract specific variables.
 
+Condisider, again, `studydesign`. 
+
 ```{r}
 
-testdat <-
+studydesign_long <-
   condensed_dat %>% 
-  mutate(
-    study_design = map(
-      studydesign,
-      .f = function(text) {
-        tibble(
-          study_design = str_split(text, pattern = "; ")
-        )
-      }
-    ))
-
+  unnest(studydesign=strsplit(studydesign, "; "))
 
 ```
 
-If we functionalise this, we can 
+For the records that have more than one entry for `studydesign`, 
 
 ```{r}
+condensed_dat %>% count(studydesign)
 
+studydesign_long %>% dim()
 
+studydesign_long %>% 
+  count(studydesign)
 
 ```
-
-
 
 # Long to narrative
 
