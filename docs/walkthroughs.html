@@ -1428,7 +1428,7 @@ example_dat %&gt;%
 </div>
 <p>We can see a pattern of groupings by prefix. Now we inspect one variable: the data prefixed with <code>studydesign</code>.</p>
 <h1 id="wide-to-narrative-condensed">Wide to narrative (condensed)</h1>
-<p>To produce a narrative table, we take data</p>
+<p>To produce a narrative table, we combine wide columns into one concatenated, think placing text side by side, variable. In conventional spreadsheet software, this is combining cells.</p>
 <h2 id="condensing-one-variable">Condensing one variable</h2>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
@@ -1540,7 +1540,7 @@ condense_readable &lt;-
 <pre class="r"><code>
 # condense all
 
-condensed_dat &lt;- 
+example_narrative &lt;- 
   example_dat %&gt;% 
   condense_readable(&quot;studydesign&quot;) %&gt;% 
   condense_readable(&quot;spatialscale&quot;) %&gt;% 
@@ -1552,7 +1552,7 @@ condensed_dat &lt;-
   condense_readable(&quot;stripmanagement&quot;) 
 
 # take a look at our condensed variables
-condensed_dat %&gt;%
+example_narrative %&gt;%
   select(
     studydesign,
     spatialscale,
@@ -1586,13 +1586,13 @@ condensed_dat %&gt;%
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 studydesign_long &lt;-
-  condensed_dat %&gt;% 
+  example_narrative %&gt;% 
   unnest(studydesign=strsplit(studydesign, &quot;; &quot;))</code></pre>
 </div>
 <p>For the records that have more than one entry for <code>studydesign</code>,</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
-condensed_dat %&gt;% count(studydesign)</code></pre>
+example_narrative %&gt;% count(studydesign)</code></pre>
 <pre><code>
 # A tibble: 3 x 2
   studydesign                     n
@@ -1614,7 +1614,513 @@ studydesign_long %&gt;%
 1 Manipulative    412
 2 Observational   666</code></pre>
 </div>
+<p>As with condensing, we can achieve the converse, by iterating this code through each condense variable.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+example_long &lt;-
+  example_narrative %&gt;%
+  unnest(studydesign = strsplit(studydesign, &quot;; &quot;)) %&gt;%
+  unnest(spatialscale = strsplit(spatialscale, &quot;; &quot;)) %&gt;%
+  unnest(measurement = strsplit(measurement, &quot;; &quot;)) %&gt;%
+  unnest(farmingsystem = strsplit(farmingsystem, &quot;; &quot;)) %&gt;%
+  unnest(farmingproductionsystem = strsplit(farmingproductionsystem, &quot;; &quot;)) %&gt;%
+  unnest(vegetationtype = strsplit(vegetationtype, &quot;; &quot;)) %&gt;%
+  unnest(striplocation = strsplit(striplocation, &quot;; &quot;)) %&gt;%
+  unnest(stripmanagement = strsplit(stripmanagement, &quot;; &quot;))</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+
+<pre class="r"><code>
+example_long %&gt;% 
+  head() %&gt;% 
+  kable()</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+item_id
+</th>
+<th style="text-align:left;">
+short_title
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:left;">
+year
+</th>
+<th style="text-align:left;">
+period
+</th>
+<th style="text-align:left;">
+google_scholar_link
+</th>
+<th style="text-align:left;">
+vegetated_strip_description
+</th>
+<th style="text-align:left;">
+nation
+</th>
+<th style="text-align:left;">
+study_country
+</th>
+<th style="text-align:left;">
+study_location
+</th>
+<th style="text-align:left;">
+latitute
+</th>
+<th style="text-align:left;">
+longitude
+</th>
+<th style="text-align:left;">
+studydesign
+</th>
+<th style="text-align:left;">
+study_length_years
+</th>
+<th style="text-align:left;">
+time_since_intervention_years
+</th>
+<th style="text-align:left;">
+spatialscale
+</th>
+<th style="text-align:left;">
+measurement
+</th>
+<th style="text-align:left;">
+farmingsystem
+</th>
+<th style="text-align:left;">
+farmingproductionsystem
+</th>
+<th style="text-align:left;">
+vegetationtype
+</th>
+<th style="text-align:left;">
+striplocation
+</th>
+<th style="text-align:left;">
+stripmanagement
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+20641367
+</td>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+Invertebrate Biodiversity in Agricultural and Urban Headwater Streams: Implications for Conservation and Management
+</td>
+<td style="text-align:left;">
+2005
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5" class="uri">http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5</a>
+</td>
+<td style="text-align:left;">
+Riparian buffer
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Maryland, USA
+</td>
+<td style="text-align:left;">
+Cattail Creek, Hawling’s River, Northwest Branch, Paint Branch of Chesapeake Bay Watershed, Maryland
+</td>
+<td style="text-align:left;">
+39.045755
+</td>
+<td style="text-align:left;">
+-76.641271
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Catchment scale
+</td>
+<td style="text-align:left;">
+Q1
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Riparian
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20641367
+</td>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+Invertebrate Biodiversity in Agricultural and Urban Headwater Streams: Implications for Conservation and Management
+</td>
+<td style="text-align:left;">
+2005
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5" class="uri">http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5</a>
+</td>
+<td style="text-align:left;">
+Riparian buffer
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Maryland, USA
+</td>
+<td style="text-align:left;">
+Cattail Creek, Hawling’s River, Northwest Branch, Paint Branch of Chesapeake Bay Watershed, Maryland
+</td>
+<td style="text-align:left;">
+39.045755
+</td>
+<td style="text-align:left;">
+-76.641271
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Catchment scale
+</td>
+<td style="text-align:left;">
+Q2
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Riparian
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20641367
+</td>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+Invertebrate Biodiversity in Agricultural and Urban Headwater Streams: Implications for Conservation and Management
+</td>
+<td style="text-align:left;">
+2005
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5" class="uri">http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5</a>
+</td>
+<td style="text-align:left;">
+Riparian buffer
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Maryland, USA
+</td>
+<td style="text-align:left;">
+Cattail Creek, Hawling’s River, Northwest Branch, Paint Branch of Chesapeake Bay Watershed, Maryland
+</td>
+<td style="text-align:left;">
+39.045755
+</td>
+<td style="text-align:left;">
+-76.641271
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Q1
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Riparian
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20641367
+</td>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+Invertebrate Biodiversity in Agricultural and Urban Headwater Streams: Implications for Conservation and Management
+</td>
+<td style="text-align:left;">
+2005
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5" class="uri">http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5</a>
+</td>
+<td style="text-align:left;">
+Riparian buffer
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Maryland, USA
+</td>
+<td style="text-align:left;">
+Cattail Creek, Hawling’s River, Northwest Branch, Paint Branch of Chesapeake Bay Watershed, Maryland
+</td>
+<td style="text-align:left;">
+39.045755
+</td>
+<td style="text-align:left;">
+-76.641271
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Q2
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Riparian
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20641374
+</td>
+<td style="text-align:left;">
+Aavik (2008)
+</td>
+<td style="text-align:left;">
+What is the role of local landscape structure in the vegetation composition of field boundaries?
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=What+is+the+role+of+local+landscape+structure+in+the+vegetation+composition+of+field+boundaries?&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5" class="uri">http://scholar.google.co.uk/scholar?q=What+is+the+role+of+local+landscape+structure+in+the+vegetation+composition+of+field+boundaries?&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5</a>
+</td>
+<td style="text-align:left;">
+Field boundary
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+Vaike-Maarja, Are, Vihtra, Virratsi, Abja-Paluoja and Ilmatsalu
+</td>
+<td style="text-align:left;">
+58.595272
+</td>
+<td style="text-align:left;">
+25.013607
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Livestock
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Field edge
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20641374
+</td>
+<td style="text-align:left;">
+Aavik (2008)
+</td>
+<td style="text-align:left;">
+What is the role of local landscape structure in the vegetation composition of field boundaries?
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=What+is+the+role+of+local+landscape+structure+in+the+vegetation+composition+of+field+boundaries?&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5" class="uri">http://scholar.google.co.uk/scholar?q=What+is+the+role+of+local+landscape+structure+in+the+vegetation+composition+of+field+boundaries?&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5</a>
+</td>
+<td style="text-align:left;">
+Field boundary
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+Vaike-Maarja, Are, Vihtra, Virratsi, Abja-Paluoja and Ilmatsalu
+</td>
+<td style="text-align:left;">
+58.595272
+</td>
+<td style="text-align:left;">
+25.013607
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Cropped fields (arable)
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Field edge
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h1 id="long-to-narrative">Long to narrative</h1>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
 <h1 id="narrative-to-wide">Narrative to wide</h1>
 <p>Suppose, that we begin with condensed data, and wish to structure it for</p>
 <h1 id="wide-to-long">Wide to long</h1>

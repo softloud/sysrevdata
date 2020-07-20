@@ -86,7 +86,7 @@ We can see a pattern of groupings by prefix. Now we inspect one variable: the da
 
 # Wide to narrative (condensed)
 
-To produce a narrative table, we take data 
+To produce a narrative table, we combine wide columns into one concatenated, think placing text side by side, variable. In conventional spreadsheet software, this is combining cells.  
 
 ## Condensing one variable
 
@@ -159,7 +159,7 @@ condense_readable <-
 ```{r}
 # condense all
 
-condensed_dat <- 
+example_narrative <- 
   example_dat %>% 
   condense_readable("studydesign") %>% 
   condense_readable("spatialscale") %>% 
@@ -171,7 +171,7 @@ condensed_dat <-
   condense_readable("stripmanagement") 
 
 # take a look at our condensed variables
-condensed_dat %>%
+example_narrative %>%
   select(
     studydesign,
     spatialscale,
@@ -189,12 +189,12 @@ condensed_dat %>%
 
 Now, if we begin with a narrative table, we may wish to extract specific variables.
 
-Condisider, again, `studydesign`. 
+Consider, again, `studydesign`. 
 
 ```{r}
 
 studydesign_long <-
-  condensed_dat %>% 
+  example_narrative %>% 
   unnest(studydesign=strsplit(studydesign, "; "))
 
 ```
@@ -202,7 +202,7 @@ studydesign_long <-
 For the records that have more than one entry for `studydesign`, 
 
 ```{r}
-condensed_dat %>% count(studydesign)
+example_narrative %>% count(studydesign)
 
 studydesign_long %>% dim()
 
@@ -211,14 +211,94 @@ studydesign_long %>%
 
 ```
 
+As with condensing, we can achieve the converse, by iterating this code through each condensed variable. We'll replace `Not described` with `NA`, so that we don't add new rows for these indications of no observation. 
+
+```{r}
+
+
+
+
+```
+
+
+```{r}
+
+example_long <-
+  example_narrative %>% 
+  mutate(
+  studydesign = strsplit(studydesign, "; "),
+  spatialscale = strsplit(spatialscale, "; "),
+  measurement = strsplit(measurement, "; "),
+  farmingsystem = strsplit(farmingsystem, "; "),
+  farmingproductionsystem = strsplit(farmingproductionsystem, "; "),
+  vegetationtype = strsplit(vegetationtype, "; "),
+  striplocation = strsplit(striplocation, "; "),
+  stripmanagement = strsplit(stripmanagement, "; ")
+  ) %>% 
+  unnest(c(studydesign, spatialscale, measurement, farmingsystem, farmingproductionsystem, vegetationtype, striplocation, stripmanagement))
+
+
+
+```
+
+
+```{r}
+example_long %>% 
+  head() %>% 
+  select(short_title, year, studydesign, spatialscale, measurement)
+  kable()
+
+
+```
+
+> Should we replacee "not described" with NA?
+
+Note that despite the plotting etc. advantages of long, it can generate a much larger dataset very quickly. This makes it harder to visuallly inspect the data.
+
+```{r}
+
+# dimensions of data we started with
+example_dat %>% dim()
+
+# dimensions of long data
+example_long %>% dim()
+
+
+
+```
+
+
 # Long to narrative
+
+```{r}
+
+
+
+```
+
 
 
 # Narrative to wide
 
-Suppose, that we begin with condensed data, and wish to structure it for 
+Suppose, that we begin with condensed data, and wish to structure it wide, for w
+
+> Identify what the wide dataset is used for in this context
 
 # Wide to long
 
 # Long to wide
+
+If we begin with long data, we may wish to convert it to wide for 
+
+> --? for what? Discuss with Matt.
+
+```{r}
+example_long %>% 
+  pivot_wider(
+    values_from = c(studydesign, striplocation)
+  )
+
+
+```
+
 
