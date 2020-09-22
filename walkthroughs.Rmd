@@ -1,0 +1,463 @@
+---
+title: "walkthroughs"
+output: 
+  distill::distill_article:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# packages used in this walkthrough
+library(tidyverse) # all purpose cleaner
+library(janitor) # clean_names for snake_case
+library(skimr) # skim to summarise data
+library(conflicted)
+conflict_prefer("filter", "dplyr")
+library(kableExtra)
+
+# the tidyverse is a metapackage that loads a suite of tools
+# useful for working with and summarising data
+```
+<aside>
+If not already installed, run `install.packages("package name")` in the console before beginning.
+</aside>
+
+# Get data
+
+> todo: set up package & embed website
+
+```{r}
+example_dat <- 
+  read_csv("data-raw/Haddawayetal2018bufferstrips.csv",
+           col_types = paste(rep("c",84), collapse = ""),
+            locale = locale(encoding="UTF-8")
+           ) %>% 
+  # clean variables names to snake_case
+  clean_names()
+
+
+```
+
+
+# Getting familiar with the data
+
+To get a sense of how many observations and variables are in this raw dataset, we assess the dimensions. 
+
+```{r}
+example_dat %>%
+  # rows and columns
+   dim()
+
+```
+
+With `r example_dat %>% dim() %>% pluck(1)` rows and `r example_dat %>% dim() %>% pluck(2)` columns, this is not so big that we can't inspect it. 
+
+```{r eval=FALSE}
+# not run
+example_dat %>%
+  # inspect data in a new pane
+  View()
+
+```
+
+The following output is omitted for brevity, but the console output is enlightening.
+
+```{r}
+# not run
+example_dat %>% 
+  str()
+
+
+```
+
+From the visual inspection, and the `str` summary, I note that the are variable levels `not described` and `not stated`, which should probably be replaced with `NA` before pivoting the data into new structure. 
+
+We can also use more sophisticated data summary tools, provided by open source packages such as `skimr::skim`.
+
+Running the following command in the console, we note a number of variables with only one unique (`n_unique`). This summary is omitted for brevity.
+
+```{r eval=FALSE}
+# not run
+skim(example_dat)
+
+```
+
+Since the `skimr::skim` summary table is a dataframe, we can identify what these variables are.
+
+```{r}
+example_dat %>% 
+  # summarise
+  skim() %>%
+  # extract variables with only one unique character string in the column
+  filter(character.n_unique == 1) %>% 
+  # output name of variable from skim
+  pluck("skim_variable") 
+
+```
+
+
+# Clean data
+
+Before we condense variables, and manipulate structure, we clean anything we noticed. It is entirely possible that through the analysis process, new quirks of the data will reveal themselves, requiring an iterative process of inspection, cleaning, and analysis [cite R for data science]. Replace `Not described` and `Not stated` with `NA`.
+
+```{r}
+find_replace<-
+  function(word_to_change,
+           change_from,
+           change_to, ignore_case=TRUE){
+    
+
+    if(ignore_case==TRUE)
+      word_equivalent<-
+      ifelse(startsWith(word_to_change,change_from)==TRUE,
+             yes = str_replace(word_to_change, change_from, change_to),
+             word_to_change )
+
+   if(ignore_case==FALSE)
+     word_equivalent<-
+       ifelse(startsWith(word_to_change,change_from)==TRUE,
+              yes = str_replace(tolower(word_to_change), 
+                                tolower(change_from),
+                                tolower(change_to)),
+              word_to_change )
+     
+  
+   return(word_equivalent)
+   }
+
+find_replace("Not stated", "Not stated", "Not described")
+find_replace("not stated", "Not stated", "Not described")
+find_replace("something else", "Not stated", "Not described")
+find_replace("not stated", "Not stated", "Not described", ignore_case = FALSE)
+find_replace("cat Not stated dog", "Not stated", "Not described")
+
+
+
+
+
+```
+
+But this doesn't run.
+
+```{r error=TRUE}
+
+example_dat %>% 
+  mutate_if(., 
+                is.character, 
+                str_replace_all, pattern = "Not stated", replacement = "Not described")              
+                  
+# example_dat %>% 
+#   mutate_if(., 
+#                 is.character, 
+#                 find_replace(.,"Not stated", "Not described"))              
+#                   
+#Error: `true` must be length 1 (length of `condition`), not 84.
+```
+
+[Stack exchange](https://stackoverflow.com/questions/9637278/r-tm-package-invalid-input-in-utf8towcs) suggests we need to remove all "non graphical characters". 
+
+```{r}
+# todo: replce example dats above with raw
+
+example_dat_cleaned <-
+  example_dat %>%
+  # remove the non graphical characters
+  mutate(across(
+    everything(),
+    .fns = function(x) {
+      str_replace_all(x, "[^[:graph:]]", " ")
+    }
+  )) %>%
+  # and now the code in the above chunk works.
+  mutate(across(
+    everything(),
+    ~ find_replace(as.character(.x), "Not stated", "Not described")
+  ))
+
+
+
+```
+
+```{r}
+
+example_dat  %>%
+  dplyr::summarise(across(everything(), ~ sum(
+    str_detect(as.character(.x), "Not described"), na.rm = TRUE
+  ))) %>% t()
+
+```
+
+
+
+# Wide to narrative (condensed)
+
+To produce a narrative table, we combine wide columns into one concatenated column, think placing text side by side, variable. In conventional spreadsheet software, this is combining cells.  
+
+## Condensing one variable
+
+To see how this works, we will first consider the columns that contain `studydesign`. 
+
+```{r}
+# take a look at the study design columns
+example_dat %>% 
+  select(contains("studydesign"))
+
+```
+
+We see at least the top of the data is split with one indication in `studydesign_observational`
+
+First, we check our assumption that there are never strings in both columns.
+
+```{r}
+
+# check assumption that variable is encoded across
+# two columns
+example_dat %>% 
+  select(contains("studydesign")) %>% 
+  filter(
+    !( # which rows do not meet these assumptions
+      
+      # na in observational and manipulative string
+      (is.na(studydesign_observational) & 
+        studydesign_manipulative == "Manipulative") | # or
+        
+        # na in manipulative & observational sring
+        (is.na(studydesign_manipulative) & studydesign_observational == "Observational")
+    )
+  )
+
+```
+
+The data are not _quite_ as expected. There are three levels to a condensed `studydesign` variable: observational, manipulative, and _both_ observational and manipulative.
+
+Since we know the structure of all the data now, one way to condense these two columns would be via concatenating the variables.
+
+```{r}
+study_design <- 
+  example_dat %>%
+  # for this example
+  select(contains("studydesign")) %>% 
+  unite(
+    col = "study_design",
+    contains("studydesign"),
+    sep = "; ",
+    na.rm = TRUE
+  ) 
+
+# top of studydesign
+study_design
+
+# check the two-value columns
+study_design %>% 
+  filter(str_length(study_design) > str_length("Observational"))
+
+```
+
+## Condensing all wide variables
+
+Now that we have the general idea of this, we can create a function to reduce the code. 
+
+```{r}
+
+
+
+condense_readable <-
+  function(dat, variable) {
+    unite(dat,
+          col = {
+            {
+              variable
+            }
+          },
+          contains({
+            {
+              variable
+            }
+          }),
+          na.rm = TRUE,
+          sep = "; ")
+  }
+
+```
+
+But, from here, we arguably should not make the code more succinct, as we wish for another to clearly discern which variables we are condensing. A `::map` function could take a string of variables of the following form. 
+
+```{}
+# pseudo code
+string of variables %>% 
+  map wrapper function for condense_readable 
+
+```
+
+But this would make it harder for another to understand. Sometimes it is prudent to opt for more code lines when it makes the code more accessible to another analyst, but also the analyst's future self, who is now unfamiliar with the code.
+
+```{r}
+# condense desired variables, one at a time 
+example_narrative <- 
+  example_dat %>% 
+  # although this code could be more succinct
+  # that would come at a cost of it being accessible
+  condense_readable("studydesign") %>% 
+  condense_readable("spatialscale") %>% 
+  condense_readable("measurement") %>% 
+  condense_readable("farmingsystem") %>% 
+  condense_readable("farmingproductionsystem") %>% 
+  condense_readable("vegetationtype") %>% 
+  condense_readable("striplocation") %>% 
+  condense_readable("stripmanagement") 
+
+# take a look at our condensed variables
+example_narrative %>%
+  select(
+    studydesign,
+    spatialscale,
+    measurement,
+    farmingsystem,
+    farmingproductionsystem,
+    vegetationtype,
+    striplocation,
+    stripmanagement
+  )
+
+```
+
+# Narrative to long
+
+Now, if we begin with a narrative table, we may wish to extract specific variables from the condensed data. How long is long? Once again, we must decide what is usefully long in this particular context. For the purposes of this example, we will create a new table with only one observation per row, per variable. 
+
+Consider, again, `studydesign`. 
+
+```{r}
+
+studydesign_long <-
+  example_narrative %>% 
+  unnest(studydesign=strsplit(studydesign, "; "))
+
+```
+
+For the records that have more than one entry for `studydesign`, 
+
+```{r}
+example_narrative %>% count(studydesign)
+
+studydesign_long %>% dim()
+
+studydesign_long %>% 
+  count(studydesign)
+
+```
+
+As with condensing, we can achieve the converse, by iterating this code through each condensed variable. We'll replace `Not described` with `NA`, so that we don't add new rows for these indications of no observation. 
+
+```{r}
+
+
+
+
+```
+
+
+```{r}
+
+example_long <-
+  example_narrative %>% 
+  mutate(
+  studydesign = strsplit(studydesign, "; "),
+  spatialscale = strsplit(spatialscale, "; "),
+  measurement = strsplit(measurement, "; "),
+  farmingsystem = strsplit(farmingsystem, "; "),
+  farmingproductionsystem = strsplit(farmingproductionsystem, "; "),
+  vegetationtype = strsplit(vegetationtype, "; "),
+  striplocation = strsplit(striplocation, "; "),
+  stripmanagement = strsplit(stripmanagement, "; ")
+  ) %>% 
+  unnest(c(studydesign, spatialscale, measurement, farmingsystem, farmingproductionsystem, vegetationtype, striplocation, stripmanagement))
+
+
+
+```
+
+
+```{r}
+example_long %>% 
+  head() %>% 
+  select(short_title, year, studydesign, spatialscale, measurement)
+  kable()
+
+
+```
+
+> Should we replacee "not described" with NA?
+
+Note that despite the plotting etc. advantages of long, it can generate a much larger dataset very quickly. This makes it harder to visuallly inspect the data.
+
+```{r}
+
+# dimensions of data we started with
+example_dat %>% dim()
+
+# dimensions of long data
+example_long %>% dim()
+
+
+
+```
+
+# Long to narrative
+
+```{r}
+
+
+
+```
+
+# Narrative to wide
+
+Suppose, that we begin with condensed data, `example_narrative` and wish to structure it wide. 
+
+```{r}
+
+```
+
+
+> Identify what the wide dataset is used for in this context
+
+# Wide to long
+
+Converting wide data to long form is particularly useful for structuring data for machines. For example, the `tidyverse::` metapackage expects longer-format data, wherein each row is an observation, and each column a different variable of that obseration. Interestingly, the `::pivot_longer` documentation provides the following nuanced observation,
+
+> I don’t believe it makes sense to describe a dataset as being in “long form”. Length is a relative term, and you can only say (e.g.) that dataset A is longer than dataset B. [from `vignette("pivot")`]
+
+The length of a dataset is determined by the 
+
+
+```{r}
+example_dat 
+
+
+```
+
+
+# Long to wide
+
+If we begin with long data, we may wish to convert it to wide for (what? Discuss with Matt.)
+
+Suppose, we were integrating results of another study that came in the form.
+
+```{r}
+example_long
+
+```
+
+To take this dataset to wide format, that is, the format we began with, we make use of `pivot_wider` from the `tidyverse::` package.
+
+```{r}
+example_long %>% 
+  pivot_wider(
+    values_from = c(studydesign, striplocation)
+  )
+
+```
+
+
