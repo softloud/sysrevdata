@@ -250,16 +250,8 @@ Now that we have the general idea of this, we can create a function to reduce th
 condense_readable <-
   function(dat, variable) {
     unite(dat,
-          col = {
-            {
-              variable
-            }
-          },
-          contains({
-            {
-              variable
-            }
-          }),
+          col = {{variable}},
+          contains({{variable}}),
           na.rm = TRUE,
           sep = "; ")
   }

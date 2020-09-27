@@ -1,0 +1,24 @@
+---
+title: "example_3_ms"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{example_3_ms}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sysrevdata)
+```
+
+```{r}
+
+```
+
