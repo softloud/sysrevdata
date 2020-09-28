@@ -34,6 +34,9 @@ devtools::install_github("softloud/sysrevdata")
 
 # Contributing to this
 
-If you have an idea for an improvement or extension, please consider
-contributing a pull request or opening an
+This is work that extended from ideas generated at the [Evidence
+Synthesis Hackathon](https://www.eshackathon.org/); it is the voluntary
+work of open scientists who welcome contributions. If you have an idea
+for an improvement or extension, please consider contributing a pull
+request or opening an
 [issue](https://github.com/softloud/sysrevdata/issues).

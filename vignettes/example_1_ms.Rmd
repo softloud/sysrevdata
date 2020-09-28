@@ -1,5 +1,5 @@
 ---
-title: "example_1_ms"
+title: "example 1"
 subtitle: "Separating multiple values per cell onto separate lines"
 output: rmarkdown::html_vignette
 vignette: >
