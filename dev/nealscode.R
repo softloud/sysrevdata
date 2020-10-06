@@ -5,7 +5,6 @@ data <- read.csv(file.choose())#, row.names = 1
 library(tidyr)
 library(dplyr)
 
-
 #' Part 1
 #' Tidying and understanding the database
 #'
