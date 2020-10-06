@@ -1,9 +1,8 @@
 ---
-title: "example 1"
-subtitle: "Separating multiple values per cell onto separate lines"
+title: "analytical"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{example_1_ms}
+  %\VignetteIndexEntry{analytical}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,9 +15,5 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(tidyverse)
-
-
+library(sysrevdata)
 ```
-
-

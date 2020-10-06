@@ -1,8 +1,8 @@
 ---
-title: "example_2_ms"
+title: "data-structures"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{example_2_ms}
+  %\VignetteIndexEntry{data-structures}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

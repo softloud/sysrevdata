@@ -1,8 +1,8 @@
 ---
-title: "example_3_ms"
+title: "narrative"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{example_3_ms}
+  %\VignetteIndexEntry{narrative}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,8 +17,3 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(sysrevdata)
 ```
-
-```{r}
-
-```
-
