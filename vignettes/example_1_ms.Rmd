@@ -22,9 +22,3 @@ library(tidyverse)
 ```
 
 
-
-```{r}
-# get data
-
-```
-
