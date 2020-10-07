@@ -8,11 +8,11 @@ Authors@R: c(person(given = "Charles",
            comment = c(ORCID = "/0000-0002-9978-011X")),
       person(given = "Matthew",
            family = "Grainger",
-           role = c("aut", "cre"),
+           role = c("aut"),
            comment = c(ORCID = "0000-0001-8426-6495")),
       person(given = "Neal",
            family = "Haddaway",
-           role = c("aut", "cre"),
+           role = c("aut"),
            comment = c(ORCID = "0000-0003-3902-2234"))
            )
 Description: This is the accompanying collection of walkthroughs for the manuscript: Methods for designing multifunctional, machine readable systematic review and map databases
@@ -23,7 +23,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    here
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
