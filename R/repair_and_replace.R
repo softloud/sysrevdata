@@ -38,3 +38,23 @@ trim_spaces <- function(data,
              sep = '')
   x <- as.data.frame(lapply(data, function(x) gsub(z, value_sep, x)))
 }
+
+
+#' Replace text string across database
+#'
+#' @description Replace a given string.
+#' @param data A dataframe containing rows of systematic review data.
+#' @param replace A string to be replaced across the dataframe.
+#' @param with A string used to replace the above string.
+#' @return A dataframe with the string replaced.
+#' @examples
+#' data <- replace_string(data, replace = 'NULL', with = '');
+replace_string <- function(data,
+                           replace,
+                           with){
+  x <- anchors::replace.value(data,
+                              names = colnames(data),
+                              from = replace,
+                              to = with)
+  return(x)
+}

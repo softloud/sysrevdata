@@ -2,7 +2,7 @@
 #'
 #' @description Produce report on dataframe based on possible separators
 #' identified within each column.
-#' @param data A dataframe containing rows of systematic review data
+#' @param data A dataframe containing rows of systematic review data.
 #' @param value_sep A character used to separate values within the data. The
 #' default is set to ';'.
 #' @return Returns two outputs: 1) a list of possible candidate separators
