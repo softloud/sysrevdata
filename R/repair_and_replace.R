@@ -11,6 +11,7 @@
 #' @examples
 #' data <- data %>%
 #'     replace_sep(old_sep = 'xxx', new_sep = '; ');
+#' @export
 replace_sep <- function(data,
                         old_sep,
                         new_sep = "; "){
@@ -29,6 +30,7 @@ replace_sep <- function(data,
 #' @return Dataframe with whitespace removed.
 #' @examples
 #' data <- trim_spaces(data);
+#' @export
 trim_spaces <- function(data,
                         value_sep = ';'){
   x <- as.data.frame(mapply(trimws, data))
