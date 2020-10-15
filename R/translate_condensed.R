@@ -53,7 +53,7 @@ condensed_to_wide <- function(data,
       tidyr::separate_rows(.,
                            i,
                            sep = value_sep) %>%
-      pivot_wider(names_from = i,
+      tidyr::pivot_wider(names_from = i,
                   values_from = i,
                   values_fn = list,
                   names_prefix = paste(i,
