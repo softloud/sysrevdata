@@ -7,7 +7,7 @@
 #' @param columns A set of columns containing coded data from within a dataframe.
 #' @param value_sep A character used to separate values within the data. The
 #' default is set to ';'.
-#' @importFrom magrittr
+#' @importFrom magrittr '%>%'
 #' @return A dataframe in 'long' format.
 #' @examples
 #' long <- wide_to_long(data, columns)
@@ -46,7 +46,7 @@ wide_to_long <- function(data,
 #' @param readable Logical argument (TRUE or FALSE) specifying whether the value separator
 #' should be followed by a space to improve readability (e.g. '; ' instead of ';').
 #' The default is set to 'readable = TRUE'.
-#' @importFrom magrittr
+#' @importFrom magrittr '%>%'
 #' @return A dataframe in 'condensed' format.
 #' @examples
 #' wide <- wide_to_condensed(data, columns, readable = TRUE)

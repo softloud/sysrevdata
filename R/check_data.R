@@ -127,7 +127,6 @@ is_long <- function(key_variable,
 #' @examples
 #' is_wide(key_variable, columns, value_sep = ';');
 #' @export
-#' is_wide() - c
 is_wide <- function(key_variable,
                     columns,
                     value_sep = ';'){

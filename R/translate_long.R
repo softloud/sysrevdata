@@ -8,7 +8,7 @@
 #' names within the data. The default is set to '_' (i.e. snake_case).
 #' @param value_sep A character used to separate values within the data. The
 #' default is set to ';'.
-#' @importFrom magrittr
+#' @importFrom magrittr '%>%'
 #' @return A dataframe in 'wide' format.
 #' @examples
 #' wide_data2 <- long_to_wide(long_data, columns, value_sep = 'xxx')
@@ -49,7 +49,7 @@ long_to_wide <- function(data,
 #' @param readable Logical argument (TRUE or FALSE) specifying whether the value separator
 #' should be followed by a space to improve readability (e.g. '; ' instead of ';').
 #' The default is set to 'readable = TRUE'.
-#' @importFrom magrittr
+#' @importFrom magrittr '%>%'
 #' @return A dataframe in 'condensed' format.
 #' @examples
 #' condensed <- long_to_condensed(data, columns, readable = TRUE)

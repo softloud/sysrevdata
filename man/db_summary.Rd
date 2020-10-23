@@ -7,7 +7,7 @@
 db_summary(data, value_sep = ";")
 }
 \arguments{
-\item{data}{A dataframe containing rows of systematic review data}
+\item{data}{A dataframe containing rows of systematic review data.}
 
 \item{value_sep}{A character used to separate values within the data. The
 default is set to ';'.}

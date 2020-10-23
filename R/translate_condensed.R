@@ -7,7 +7,7 @@
 #' @param columns A set of columns containing coded data from within a dataframe.
 #' @param value_sep A character used to separate values within the data. The
 #' default is set to ';'.
-#' @importFrom magrittr
+#' @importFrom magrittr '%>%'
 #' @return A dataframe in 'long' format.
 #' @examples
 #' fpath <- system.file("extdata", "data.csv", package="sysrevdata")
@@ -39,7 +39,7 @@ condensed_to_long <- function(data,
 #' names within the data. The default is set to '_' (i.e. snake_case).
 #' @param value_sep A character used to separate values within the data. The
 #' default is set to ';'.
-#' @importFrom magrittr
+#' @importFrom magrittr '%>%'
 #' @return A dataframe in 'wide' format.
 #' @examples
 #' wide_data <- condensed_to_wide(data, columns, value_sep = 'xxx');
