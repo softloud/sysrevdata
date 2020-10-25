@@ -13,7 +13,8 @@
 #' fpath <- system.file("extdata", "data.csv", package="sysrevdata")
 #' data <- read.csv(fpath)
 #' columns <- c('region', 'hazard', 'response', 'sdgs', 'actor')
-#' long_data <- condensed_to_long(data, columns, value_sep = 'xxx');
+#' long_data <- condensed_to_long(data, columns, value_sep = 'xxx')
+#' long_data;
 #' @export
 condensed_to_long <- function(data,
                               columns,
@@ -42,6 +43,7 @@ condensed_to_long <- function(data,
 #' @importFrom magrittr '%>%'
 #' @return A dataframe in 'wide' format.
 #' @examples
+#' columns <- c('region', 'hazard', 'response', 'sdgs', 'actor')
 #' wide_data <- condensed_to_wide(data, columns, value_sep = 'xxx');
 #' @export
 condensed_to_wide <- function(data,
