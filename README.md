@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/softloud/sysrevdata.svg?branch=master)](https://travis-ci.com/softloud/sysrevdata)
 <!-- badges: end -->
 
 The goal of sysrevdata is to provide examples and extensible tools for
