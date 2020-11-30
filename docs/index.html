@@ -82,9 +82,61 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#sysrevdata" class="anchor"></a>sysrevdata</h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>The goal of sysrevdata is to provide examples and extensible tools for structuring data for systematic review.</p>
 <p>See vignettes for example toolchain walkthroughs.</p>
+<div id="example-datasets" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-datasets" class="anchor"></a>Example datasets</h2>
+<p>This package currently contains two example datasets from published open systematic reviews.</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sysrevdata</span>)
+
+<span class="co"># take a peek at the first 10 rows, </span>
+<span class="co"># restricted to first 5 columns, </span>
+<span class="co"># of each dataset</span>
+
+<span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
+  <span class="co"># select first five columns</span>
+  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+  <span class="co"># select first 10 rows</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
+<span class="co">#&gt; # A tibble: 10 x 5</span>
+<span class="co">#&gt;     item_id short_title    title                                    year period </span>
+<span class="co">#&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;                                   &lt;dbl&gt; &lt;chr&gt;  </span>
+<span class="co">#&gt;  1 20641367 Aaron (2005)   Invertebrate Biodiversity in Agricultu…  2005 2005-2…</span>
+<span class="co">#&gt;  2 20641374 Aavik (2008)   What is the role of local landscape st…  2008 2005-2…</span>
+<span class="co">#&gt;  3 20641375 Aavik (2010)   Quantifying the effect of organic farm…  2010 2010-2…</span>
+<span class="co">#&gt;  4 20641382 Abu-Zreig (20… Experimental investigation of runoff r…  2004 2000-2…</span>
+<span class="co">#&gt;  5 20641384 Abu-Zreig (20… Phosphorus removal in vegetated filter…  2003 2000-2…</span>
+<span class="co">#&gt;  6 20641386 Adams (2013)   Disturbance and landscape effects on a…  2013 2010-2…</span>
+<span class="co">#&gt;  7 20641389 Ahern (2002)   Effect of different wheat production s…  2002 2000-2…</span>
+<span class="co">#&gt;  8 20641390 Al (2013)      Does the presence of grassy strips and…  2013 2010-2…</span>
+<span class="co">#&gt;  9 20641397 Alignier (201… Changes in management practices over t…  2015 2015-2…</span>
+<span class="co">#&gt; 10 20641398 Anan'eva (200… Comparative assessment of soil microbi…  2008 2005-2…</span>
+
+<span class="no">hazard</span> <span class="kw">%&gt;%</span>
+  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
+<span class="co">#&gt; # A tibble: 10 x 5</span>
+<span class="co">#&gt;    article_id region title               authors             hazard             </span>
+<span class="co">#&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;              </span>
+<span class="co">#&gt;  1    6205478 Africa The response to cl… Nti, F.K.; Barkley… Drought||| Precipi…</span>
+<span class="co">#&gt;  2    6205479 Africa Sheep breeding in … Jemaa, T; Huguenin… General climate im…</span>
+<span class="co">#&gt;  3    6205480 Africa I eat two meals pe… Saronga, N.J.; Mos… Drought||| Extreme…</span>
+<span class="co">#&gt;  4    6205481 Africa Migration and Self… Ng'ang'a, SK; Bult… Precipitation vari…</span>
+<span class="co">#&gt;  5    6205482 Africa Migration as an ad… Simatele, D; Simat… Other1||| Precipit…</span>
+<span class="co">#&gt;  6    6205483 Africa DEVELOPMENT OF CON… Thierfelder, C; Bu… Drought||| Precipi…</span>
+<span class="co">#&gt;  7    6205484 Africa Adaptation and res… Tambo, JA           General climate im…</span>
+<span class="co">#&gt;  8    6205485 Africa Perception of and … Bedeke, SB; Vanhov… General climate im…</span>
+<span class="co">#&gt;  9    6205486 Africa Diversification an… Zorom, M; Barbier,… General climate im…</span>
+<span class="co">#&gt; 10    6205487 Africa Adapting agricultu… Bryan, E; Ringler,… Extreme precipitat…</span></pre></div>
+<p>See</p>
+<ul>
+<li><code><a href="reference/bufferstrips.html">?bufferstrips</a></code></li>
+<li><code><a href="reference/hazard.html">?hazard</a></code></li>
+</ul>
+<p>for more details.</p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -94,7 +146,7 @@
 <!-- ``` -->
 <!-- And  -->
 <p>the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("devtools")</span>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("devtools")</span>
 <span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"softloud/sysrevdata"</span>)</pre></div>
 </div>
 </div>
@@ -116,13 +168,19 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Charles Gray <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org//0000-0002-9978-011X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Matthew Grainger <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-8426-6495" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Neal Haddaway <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3902-2234" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Charles Gray <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-9978-011X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Matthew Grainger <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-8426-6495" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Neal Haddaway <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3902-2234" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://travis-ci.com/softloud/sysrevdata"><img src="https://travis-ci.com/softloud/sysrevdata.svg?branch=master" alt="Travis build status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 

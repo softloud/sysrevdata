@@ -26,5 +26,6 @@ of a given value separator within a given set of columns.
 fpath <- system.file("extdata", "data.csv", package="sysrevdata")
 data <- read.csv(fpath)
 columns <- c('region', 'hazard', 'response', 'sdgs', 'actor')
-long_data <- condensed_to_long(data, columns, value_sep = 'xxx');
+long_data <- condensed_to_long(data, columns, value_sep = 'xxx')
+long_data;
 }

@@ -5,7 +5,7 @@ Authors@R: c(person(given = "Charles",
            family = "Gray",
            role = c("aut", "cre"),
            email = "charlestigray@gmail.com",
-           comment = c(ORCID = "/0000-0002-9978-011X")),
+           comment = c(ORCID = "0000-0002-9978-011X")),
       person(given = "Matthew",
            family = "Grainger",
            role = c("aut"),
@@ -29,3 +29,5 @@ Suggests:
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
+Imports: 
+    magrittr

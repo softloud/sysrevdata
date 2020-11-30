@@ -4,13 +4,15 @@
 \alias{wide_to_long}
 \title{Wide to long}
 \usage{
-wide_to_long(data, columns, name_sep = "_")
+wide_to_long(data, column_stem, name_sep = "_")
 }
 \arguments{
 \item{data}{A dataframe containing rows of systematic review data in wide
 format.}
 
-\item{columns}{A set of columns containing coded data from within a dataframe.}
+\item{column_stem}{A set of column descriptors signifying the groups of columns to condense
+based on a common stem (e.g. 'hazard' represents 'hazard_low', 'hazard_moderate', and
+'hazard_high').}
 
 \item{value_sep}{A character used to separate values within the data. The
 default is set to ';'.}
@@ -23,6 +25,6 @@ Convert from wide format to long format based on the prefix for
 each set of linked values across multiple columns.
 }
 \examples{
-long <- wide_to_long(data, columns)
+long <- wide_to_long(data, column_stem)
 long;
 }

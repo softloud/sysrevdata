@@ -1,0 +1,54 @@
+---
+title: "optimising long to wide"
+author: "Charles T. Gray"
+date: "15/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(sysrevdata)
+library(tictoc)
+
+
+```
+
+Hoping to make this function a bit faster.
+
+```{r}
+long_to_wide_original <- function(data,
+                              columns,
+                              name_sep = '_',
+                              value_sep = ';'){
+  for (i in columns){
+    data <- data %>%
+      tidyr::pivot_wider(names_from = i,
+                  values_from = i,
+                  values_fn = list,
+                  names_prefix = paste(i,
+                                       name_sep,
+                                       sep = ''),
+                  values_fill = list(val = 'NA')) %>%
+      dplyr::rename_with(snakecase::to_snake_case) %>%
+      replace_string(replace = 'NULL',
+                     with = '')
+  }
+  return(data)
+}
+
+```
+
+Check the time.
+
+```{r}
+
+tic()
+
+long_to_wide_original(bufferstrips, 
+                      columns = names(bufferstrips)[65:84])
+
+toc()
+
+```
+

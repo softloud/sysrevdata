@@ -19,9 +19,41 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.com/softloud/sysrevdata.svg?branch=master)](https://travis-ci.com/softloud/sysrevdata)
 <!-- badges: end -->
 
-The goal of sysrevdata is to provide examples and extensible tools for structuring data for systematic review.
+The goal of sysrevdata is to provide examples and extensible tools for structuring data for systematic review. 
 
 See vignettes for example toolchain walkthroughs.
+
+## Example datasets
+
+This package currently contains two example datasets from published open systematic reviews. 
+
+```{r}
+library(sysrevdata)
+
+# take a peek at the first 10 rows, 
+# restricted to first 5 columns, 
+# of each dataset
+
+bufferstrips %>%
+  # select first five columns
+  dplyr::select(1:5) %>% 
+  # select first 10 rows
+  head(10)
+  
+hazard %>%
+  dplyr::select(1:5) %>% 
+  head(10)
+
+
+```
+
+
+See
+
+- `?bufferstrips`
+- `?hazard`
+
+for more details.
 
 ## Installation
 

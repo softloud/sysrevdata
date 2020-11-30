@@ -17,3 +17,10 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(sysrevdata)
 ```
+
+## Identifying data structures
+
+## What structure do I need?
+
+## What structure do I have?
+

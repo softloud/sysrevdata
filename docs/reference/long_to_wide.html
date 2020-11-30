@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Authors • sysrevdata</title>
+<title>Long to wide — long_to_wide • sysrevdata</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script>
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,13 +33,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Authors" />
+<meta property="og:title" content="Long to wide — long_to_wide" />
+<meta property="og:description" content="Convert from long format to wide format, with each level of a given
+column separated into a different column." />
 
 
 
@@ -58,7 +60,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-authors">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +72,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">sysrevdata</a>
+        <a class="navbar-link" href="../index.html">sysrevdata</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
@@ -78,13 +80,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,13 +96,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="articles/analytical.html">analytical</a>
+      <a href="../articles/analytical.html">analytical</a>
     </li>
     <li>
-      <a href="articles/data-structures.html">data-structures</a>
+      <a href="../articles/data-structures.html">data-structures</a>
     </li>
     <li>
-      <a href="articles/narrative.html">narrative</a>
+      <a href="../articles/narrative.html">narrative</a>
     </li>
   </ul>
 </li>
@@ -118,30 +120,56 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Authors</h1>
+    <h1>Long to wide</h1>
+    
+    <div class="hidden name"><code>long_to_wide.Rd</code></div>
     </div>
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Charles Gray</strong>. Author, maintainer. <a href='https://orcid.org/0000-0002-9978-011X' target='orcid.widget' aria-label='ORCID'><span class='fab fa-orcid orcid' aria-hidden='true'></span></a>
-        </p>
-      </li>
-      <li>
-        <p><strong>Matthew Grainger</strong>. Author. <a href='https://orcid.org/0000-0001-8426-6495' target='orcid.widget' aria-label='ORCID'><span class='fab fa-orcid orcid' aria-hidden='true'></span></a>
-        </p>
-      </li>
-      <li>
-        <p><strong>Neal Haddaway</strong>. Author. <a href='https://orcid.org/0000-0003-3902-2234' target='orcid.widget' aria-label='ORCID'><span class='fab fa-orcid orcid' aria-hidden='true'></span></a>
-        </p>
-      </li>
-    </ul>
+    <div class="ref-description">
+    <p>Convert from long format to wide format, with each level of a given
+column separated into a different column.</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>long_to_wide</span>(<span class='no'>data</span>, <span class='no'>columns</span>, <span class='kw'>name_sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='kw'>value_sep</span> <span class='kw'>=</span> <span class='st'>";"</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>A dataframe containing rows of systematic review data in long format.</p></td>
+    </tr>
+    <tr>
+      <th>columns</th>
+      <td><p>A set of columns containing coded data from within a dataframe.</p></td>
+    </tr>
+    <tr>
+      <th>name_sep</th>
+      <td><p>A character used to separate terms in the newly generated column
+names within the data. The default is set to '_' (i.e. snake_case).</p></td>
+    </tr>
+    <tr>
+      <th>value_sep</th>
+      <td><p>A character used to separate values within the data. The
+default is set to ';'.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A dataframe in 'wide' format.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>wide_data2</span> <span class='kw'>&lt;-</span> <span class='fu'>long_to_wide</span>(<span class='no'>long_data</span>, <span class='no'>columns</span>, <span class='kw'>value_sep</span> <span class='kw'>=</span> <span class='st'>'xxx'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in long_to_wide(long_data, columns, value_sep = "xxx"): object 'columns' not found</span></div></pre>
   </div>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
+  </div>
 </div>
-
 
 
       <footer>
