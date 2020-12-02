@@ -14,10 +14,41 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message=FALSE}
 library(sysrevdata)
+library(tidyverse)
 ```
 
 ## Machine-structured data
 
+When releasing results for publication it is commmon to consider how to facilitate human interpretation through tables and visualisations. In addition, we recommend releasing data in a raw machine-readable format, with as little condensing as is realistic. Condensing data may prove to be an obstacle for extracting variables of interest by some researcher in the future.  
+
 ## Example
+
+Here we consider an example dataset 
+
+todo: citation
+
+The first 12 columns are all different variables. 
+```{r}
+names(bufferstrips) %>% head(12)
+
+```
+
+However, from there the columns are mostly structured wide in groups: the first string indicates the group; the second string, the subcategory in the group, such as `spatialscale`.
+
+```{r}
+names(bufferstrips)[13:30]
+
+```
+
+
+```{r}
+pivot_longer(
+  data = bufferstrips,
+  cols = 
+)
+
+
+```
+

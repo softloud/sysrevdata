@@ -20,6 +20,10 @@ library(sysrevdata)
 
 ## Constructing a narrative table
 
-### From long
+In contract to structuring data for machines, a narrative table is for summarising data to be interpreted by a human reader. 
+
+This may involve engineering the data for the summary results required and filtering to results that can be displayed on a printed page. These decisions are informed by what information is most important to highlight from the dataset. 
+
+However, in practical terms, our workflow will be informed by what structure of data we begin with. Here we consider a wide to narrative table.
 
 ### From wide

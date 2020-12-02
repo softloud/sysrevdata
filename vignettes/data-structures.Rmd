@@ -14,13 +14,89 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+
+```{r}
+# packages used in this walkthrough
 library(sysrevdata)
+library(tidyverse)
 ```
 
 ## Identifying data structures
 
+Here we provide some examples of common data structures, but these are by no means comprehensive. Data can be constructed using numerics for categorical variables, character strings encoding numerics, and booleans encoded as character strings, as in the wide example considered next.
+
+### Wide
+
+This dataset is in wide format. We have a number of different observations associated with 'strip management' listed in columns. 
+
+```{r}
+
+bufferstrips %>%
+  # extract the columns that contain stripmanagement
+  select(contains("stripmanagement"))
+
+```
+
+Each observation associated with each variable in this data set is indicated with a column that contains the name of the column if there is an association and `NA` if not. 
+
+```{r}
+
+bufferstrips %>%
+  # extract the soil disturbed observation associated with strip management
+  select("stripmanagement_soildisturbed")
+
+```
+
+
+```{r}
+hazard %>%
+  dplyr::select(1:5) %>% 
+  head(10)
+
+```
+
+If we extract the `hazard` variable, we can see the condensed string, and `|||` separators. 
+
+```{r}
+hazard %>% 
+  head() %>% 
+  pull(hazard)
+
+```
+
+### Long
+
+
 ## What structure do I need?
 
+The desired data structure for analysis and publication will be dictated by the common forms of reporting in the specialisation, such as visualisations and tables.  
+
+-example from one of the other vignettes
+
 ## What structure do I have?
+
+A common pitfall in analysis is to let the structure of the data dictate the reporting chosen. However, data is rarely provided in the format for the tables or visualisations that provide the best insights in to the pertinent questions. A common obstacle to analysis is the requirement to identify the difference between the structure of the data one begins with and what desired properties it is lacking. 
+
+Consider this example dataset from a published systematic review. Here are the first 10 rows and first 5 columns of that dataset. 
+
+```{r}
+
+bufferstrips %>%
+  # select first five columns
+  dplyr::select(1:5) %>% 
+  # select first 10 rows
+  head(10)
+
+```
+
+We can find out how many rows and columns are in the dataset.
+
+```{r}
+bufferstrips %>%
+  # return the dimensions: rows, columns
+  dim()
+
+```
+
+
 

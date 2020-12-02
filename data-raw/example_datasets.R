@@ -9,7 +9,8 @@ library(usethis)
 
 hazard <-
   read_csv("data-raw/hazard_example.csv") %>%
-  select(-X1) # I think this is a redundant column indicating row number
+  # I think this is a redundant column indicating row number.
+  select(-X1)
 
 use_data(hazard, overwrite = TRUE)
 

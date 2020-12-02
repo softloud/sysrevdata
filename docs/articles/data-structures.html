@@ -88,18 +88,138 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sysrevdata</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># packages used in this walkthrough</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sysrevdata</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyverse</span>)
+<span class="co">#&gt; ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</span>
+<span class="co">#&gt; ✓ ggplot2 3.3.2     ✓ purrr   0.3.4</span>
+<span class="co">#&gt; ✓ tibble  3.0.4     ✓ dplyr   1.0.2</span>
+<span class="co">#&gt; ✓ tidyr   1.1.1     ✓ stringr 1.4.0</span>
+<span class="co">#&gt; ✓ readr   1.3.1     ✓ forcats 0.5.0</span>
+<span class="co">#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; x dplyr::filter() masks stats::filter()</span>
+<span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span></pre></body></html></div>
 <div id="identifying-data-structures" class="section level2">
 <h2 class="hasAnchor">
 <a href="#identifying-data-structures" class="anchor"></a>Identifying data structures</h2>
+<p>Here we provide some examples of common data structures, but these are by no means comprehensive. Data can be constructed using numerics for categorical variables, character strings encoding numerics, and booleans encoded as character strings, as in the wide example considered next.</p>
+<div id="wide" class="section level3">
+<h3 class="hasAnchor">
+<a href="#wide" class="anchor"></a>Wide</h3>
+<p>This dataset is in wide format. We have a number of different observations associated with ‘strip management’ listed in columns.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r">
+<span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
+  <span class="co"># extract the columns that contain stripmanagement</span>
+  <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"stripmanagement"</span>))
+<span class="co">#&gt; # A tibble: 1,072 x 20</span>
+<span class="co">#&gt;    stripmanagement… stripmanagement… stripmanagement… stripmanagement…</span>
+<span class="co">#&gt;    &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;           </span>
+<span class="co">#&gt;  1 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  2 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  3 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  4 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  5 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  6 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  7 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  8 Unmanaged        &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt;  9 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 10 &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; # … with 1,062 more rows, and 16 more variables:</span>
+<span class="co">#&gt; #   stripmanagement_soildisturbed &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_soildisturbedinfo &lt;chr&gt;, stripmanagement_cut &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_cutinfo &lt;chr&gt;, stripmanagement_grazed &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_grazedinfo &lt;chr&gt;, stripmanagement_harvested &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_harvestedinfo &lt;chr&gt;, stripmanagement_sownplanted &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_sownplantedinfo &lt;chr&gt;, stripmanagement_pesticide &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_pesticideinfo &lt;chr&gt;, stripmanagement_managedother &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_managedotherinfo &lt;chr&gt;, stripmanagement_notdescribed &lt;chr&gt;,</span>
+<span class="co">#&gt; #   stripmanagement_notdescribedinfo &lt;chr&gt;</span></pre></body></html></div>
+<p>Each observation associated with each variable in this data set is indicated with a column that contains the name of the column if there is an association and <code>NA</code> if not.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r">
+<span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
+  <span class="co"># extract the soil disturbed observation associated with strip management</span>
+  <span class="fu">select</span>(<span class="st">"stripmanagement_soildisturbed"</span>)
+<span class="co">#&gt; # A tibble: 1,072 x 1</span>
+<span class="co">#&gt;    stripmanagement_soildisturbed</span>
+<span class="co">#&gt;    &lt;chr&gt;                        </span>
+<span class="co">#&gt;  1 &lt;NA&gt;                         </span>
+<span class="co">#&gt;  2 &lt;NA&gt;                         </span>
+<span class="co">#&gt;  3 &lt;NA&gt;                         </span>
+<span class="co">#&gt;  4 &lt;NA&gt;                         </span>
+<span class="co">#&gt;  5 &lt;NA&gt;                         </span>
+<span class="co">#&gt;  6 Soil disturbed               </span>
+<span class="co">#&gt;  7 &lt;NA&gt;                         </span>
+<span class="co">#&gt;  8 &lt;NA&gt;                         </span>
+<span class="co">#&gt;  9 &lt;NA&gt;                         </span>
+<span class="co">#&gt; 10 &lt;NA&gt;                         </span>
+<span class="co">#&gt; # … with 1,062 more rows</span></pre></body></html></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">hazard</span> <span class="kw">%&gt;%</span>
+  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
+<span class="co">#&gt; # A tibble: 10 x 5</span>
+<span class="co">#&gt;    article_id region title               authors             hazard             </span>
+<span class="co">#&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;              </span>
+<span class="co">#&gt;  1    6205478 Africa The response to cl… Nti, F.K.; Barkley… Drought||| Precipi…</span>
+<span class="co">#&gt;  2    6205479 Africa Sheep breeding in … Jemaa, T; Huguenin… General climate im…</span>
+<span class="co">#&gt;  3    6205480 Africa I eat two meals pe… Saronga, N.J.; Mos… Drought||| Extreme…</span>
+<span class="co">#&gt;  4    6205481 Africa Migration and Self… Ng'ang'a, SK; Bult… Precipitation vari…</span>
+<span class="co">#&gt;  5    6205482 Africa Migration as an ad… Simatele, D; Simat… Other1||| Precipit…</span>
+<span class="co">#&gt;  6    6205483 Africa DEVELOPMENT OF CON… Thierfelder, C; Bu… Drought||| Precipi…</span>
+<span class="co">#&gt;  7    6205484 Africa Adaptation and res… Tambo, JA           General climate im…</span>
+<span class="co">#&gt;  8    6205485 Africa Perception of and … Bedeke, SB; Vanhov… General climate im…</span>
+<span class="co">#&gt;  9    6205486 Africa Diversification an… Zorom, M; Barbier,… General climate im…</span>
+<span class="co">#&gt; 10    6205487 Africa Adapting agricultu… Bryan, E; Ringler,… Extreme precipitat…</span></pre></body></html></div>
+<p>If we extract the <code>hazard</code> variable, we can see the condensed string, and <code>|||</code> separators.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">hazard</span> <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">pull</span>(<span class="no">hazard</span>)
+<span class="co">#&gt; [1] "Drought||| Precipitation variability||| General climate impacts"                                             </span>
+<span class="co">#&gt; [2] "General climate impacts"                                                                                     </span>
+<span class="co">#&gt; [3] "Drought||| Extreme precipitation and inland flooding"                                                        </span>
+<span class="co">#&gt; [4] "Precipitation variability||| Drought||| Extreme precipitation and inland flooding||| General climate impacts"</span>
+<span class="co">#&gt; [5] "Other1||| Precipitation variability||| Drought||| General climate impacts"                                   </span>
+<span class="co">#&gt; [6] "Drought||| Precipitation variability"</span></pre></body></html></div>
+</div>
+<div id="long" class="section level3">
+<h3 class="hasAnchor">
+<a href="#long" class="anchor"></a>Long</h3>
+</div>
 </div>
 <div id="what-structure-do-i-need" class="section level2">
 <h2 class="hasAnchor">
 <a href="#what-structure-do-i-need" class="anchor"></a>What structure do I need?</h2>
+<p>The desired data structure for analysis and publication will be dictated by the common forms of reporting in the specialisation, such as visualisations and tables.</p>
+<p>-example from one of the other vignettes</p>
 </div>
 <div id="what-structure-do-i-have" class="section level2">
 <h2 class="hasAnchor">
 <a href="#what-structure-do-i-have" class="anchor"></a>What structure do I have?</h2>
+<p>A common pitfall in analysis is to let the structure of the data dictate the reporting chosen. However, data is rarely provided in the format for the tables or visualisations that provide the best insights in to the pertinent questions. A common obstacle to analysis is the requirement to identify the difference between the structure of the data one begins with and what desired properties it is lacking.</p>
+<p>Consider this example dataset from a published systematic review. Here are the first 10 rows and first 5 columns of that dataset.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r">
+<span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
+  <span class="co"># select first five columns</span>
+  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+  <span class="co"># select first 10 rows</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
+<span class="co">#&gt; # A tibble: 10 x 5</span>
+<span class="co">#&gt;     item_id short_title    title                                    year period </span>
+<span class="co">#&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;                                   &lt;dbl&gt; &lt;chr&gt;  </span>
+<span class="co">#&gt;  1 20641367 Aaron (2005)   Invertebrate Biodiversity in Agricultu…  2005 2005-2…</span>
+<span class="co">#&gt;  2 20641374 Aavik (2008)   What is the role of local landscape st…  2008 2005-2…</span>
+<span class="co">#&gt;  3 20641375 Aavik (2010)   Quantifying the effect of organic farm…  2010 2010-2…</span>
+<span class="co">#&gt;  4 20641382 Abu-Zreig (20… Experimental investigation of runoff r…  2004 2000-2…</span>
+<span class="co">#&gt;  5 20641384 Abu-Zreig (20… Phosphorus removal in vegetated filter…  2003 2000-2…</span>
+<span class="co">#&gt;  6 20641386 Adams (2013)   Disturbance and landscape effects on a…  2013 2010-2…</span>
+<span class="co">#&gt;  7 20641389 Ahern (2002)   Effect of different wheat production s…  2002 2000-2…</span>
+<span class="co">#&gt;  8 20641390 Al (2013)      Does the presence of grassy strips and…  2013 2010-2…</span>
+<span class="co">#&gt;  9 20641397 Alignier (201… Changes in management practices over t…  2015 2015-2…</span>
+<span class="co">#&gt; 10 20641398 Anan'eva (200… Comparative assessment of soil microbi…  2008 2005-2…</span></pre></body></html></div>
+<p>We can find out how many rows and columns are in the dataset.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
+  <span class="co"># return the dimensions: rows, columns</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>()
+<span class="co">#&gt; [1] 1072   84</span></pre></body></html></div>
 </div>
   </div>
 
