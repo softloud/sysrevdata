@@ -14,8 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message=FALSE}
 library(sysrevdata)
+library(tidyverse)
 ```
 
 ## Constructing a narrative table
@@ -27,3 +28,47 @@ This may involve engineering the data for the summary results required and filte
 However, in practical terms, our workflow will be informed by what structure of data we begin with. Here we consider a wide to narrative table.
 
 ### From wide
+
+For an example of wide, we'll use the `bufferstrips` data table. There are too many variables for us to create a narrative table of all variables, but we can create a narrative table for a given element by condensing that element. 
+
+Consider if we were interested in the farming production system. We will retain the short title as an identifier.
+
+```{r}
+
+farming_prod <-
+  bufferstrips %>%
+  # choose the desired columns
+  select(short_title, contains("farmingproductionsystem")) %>%
+  # condense variable
+  unite(# name condensed column
+    col = "farming_production_system",
+    # columns to condense
+    contains("farmingproductionsystem"),
+    # remove NAs
+    na.rm = TRUE)
+
+
+```
+
+We still have a fairly large table, however.
+
+```{r}
+# display rows and columsn of dataframe
+farming_prod %>% 
+  dim()
+
+```
+
+So, we might summarise it by displaying the ten most common types of farming production.
+
+```{r}
+farming_prod %>% 
+  # count types of farming production system
+    count(farming_production_system) %>%
+  # order by the count
+  arrange(desc(n)) %>% 
+  head(10)
+
+```
+
+

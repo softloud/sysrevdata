@@ -44,11 +44,25 @@ names(bufferstrips)[13:30]
 
 
 ```{r}
+
+pivoted_bufferstrips <-
 pivot_longer(
   data = bufferstrips,
-  cols = 
-)
+  cols = -c(1:12, 15, 16),
+  names_to = c("category", "subcategory"),
+  names_sep = "_",
+  values_drop_na = TRUE
+) %>% 
+  select(-value) %>% 
+  janitor::clean_names()
 
+```
+
+Dropping some of the identifying columns
+
+```{r}
+pivoted_bufferstrips %>% 
+  select(1,2,3,15, 16)
 
 ```
 
