@@ -39,7 +39,7 @@ farming_prod <-
   bufferstrips %>%
   # choose the desired columns
   select(short_title, contains("farmingproductionsystem")) %>%
-  # condense variable
+  # condense variableal
   unite(# name condensed column
     col = "farming_production_system",
     # columns to condense
