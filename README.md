@@ -14,6 +14,16 @@ structuring data for systematic review.
 
 See vignettes for example toolchain walkthroughs.
 
+## Vignettes
+
+  - [data
+    structures](https://softloud.github.io/sysrevdata/articles/data-structures.html)
+    What data do I want? What data do I have?
+  - [narrative](https://softloud.github.io/sysrevdata/articles/narrative.html)
+    Condensed summaries of data for human interpretation
+  - [analytical](https://softloud.github.io/sysrevdata/articles/analytical.html)
+    Structuring data for machine interpretation
+
 ## Example datasets
 
 This package currently contains two example datasets from published open

@@ -25,7 +25,7 @@ When releasing results for publication it is commmon to consider how to facilita
 
 ## Example
 
-Here we consider an example dataset 
+Here we consider an [example dataset](https://softloud.github.io/sysrevdata/index.html)...
 
 todo: citation
 

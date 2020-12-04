@@ -99,7 +99,8 @@
 <div id="from-wide" class="section level3">
 <h3 class="hasAnchor">
 <a href="#from-wide" class="anchor"></a>From wide</h3>
-<p>For an example of wide, we’ll use the <code>bufferstrips</code> data table. There are too many variables for us to create a narrative table of all variables, but we can create a narrative table for a given element by condensing that element.</p>
+<p>For an example of wide, we’ll use the <code>bufferstrips</code> data table. See the <a href="https://softloud.github.io/sysrevdata/index.html">example datasets</a> for more information about the data.</p>
+<p>There are too many variables for us to create a narrative table of all variables, but we can create a narrative table for a given element by condensing that element.</p>
 <p>Consider if we were interested in the farming production system. We will retain the short title as an identifier.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r">
 <span class="no">farming_prod</span> <span class="kw">&lt;-</span>
@@ -111,10 +112,12 @@
     <span class="kw">col</span> <span class="kw">=</span> <span class="st">"farming_production_system"</span>,
     <span class="co"># columns to condense</span>
     <span class="fu">contains</span>(<span class="st">"farmingproductionsystem"</span>),
+    <span class="co"># set separator</span>
+    <span class="kw">sep</span> <span class="kw">=</span> <span class="st">" ||| "</span>,
     <span class="co"># remove NAs</span>
     <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p>We still have a fairly large table, however.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># display rows and columsn of dataframe</span>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># display rows and columns of dataframe</span>
 <span class="no">farming_prod</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>()
 <span class="co">#&gt; [1] 1072    2</span></pre></body></html></div>
@@ -126,18 +129,18 @@
   <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">n</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
 <span class="co">#&gt; # A tibble: 10 x 2</span>
-<span class="co">#&gt;    farming_production_system                n</span>
-<span class="co">#&gt;    &lt;chr&gt;                                &lt;int&gt;</span>
-<span class="co">#&gt;  1 Cropped fields (arable)                196</span>
-<span class="co">#&gt;  2 Not described                          148</span>
-<span class="co">#&gt;  3 Livestock                               41</span>
-<span class="co">#&gt;  4 Livestock_Cropped fields (arable)       37</span>
-<span class="co">#&gt;  5 Cropped fields (arable)_Grassland       29</span>
-<span class="co">#&gt;  6 Cropped fields (arable)_Corn            18</span>
-<span class="co">#&gt;  7 Cropped fields (arable)_Wheat           17</span>
-<span class="co">#&gt;  8 Grassland                               14</span>
-<span class="co">#&gt;  9 Cropped fields (arable)_Maize           13</span>
-<span class="co">#&gt; 10 Cropped fields (arable)_Winter wheat    12</span></pre></body></html></div>
+<span class="co">#&gt;    farming_production_system                    n</span>
+<span class="co">#&gt;    &lt;chr&gt;                                    &lt;int&gt;</span>
+<span class="co">#&gt;  1 Cropped fields (arable)                    196</span>
+<span class="co">#&gt;  2 Not described                              148</span>
+<span class="co">#&gt;  3 Livestock                                   41</span>
+<span class="co">#&gt;  4 Livestock ||| Cropped fields (arable)       37</span>
+<span class="co">#&gt;  5 Cropped fields (arable) ||| Grassland       29</span>
+<span class="co">#&gt;  6 Cropped fields (arable) ||| Corn            18</span>
+<span class="co">#&gt;  7 Cropped fields (arable) ||| Wheat           17</span>
+<span class="co">#&gt;  8 Grassland                                   14</span>
+<span class="co">#&gt;  9 Cropped fields (arable) ||| Maize           13</span>
+<span class="co">#&gt; 10 Cropped fields (arable) ||| Winter wheat    12</span></pre></body></html></div>
 </div>
 </div>
   </div>

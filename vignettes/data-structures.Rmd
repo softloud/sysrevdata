@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r}
+```{r, message=FALSE}
 # packages used in this walkthrough
 library(sysrevdata)
 library(tidyverse)
@@ -27,7 +27,7 @@ Here we provide some examples of common data structures, but these are by no mea
 
 ### Wide
 
-This dataset is in wide format. We have a number of different observations associated with 'strip management' listed in columns. 
+This dataset is in wide format. We have a number of different observations associated with 'strip management' listed in columns. See the [example datasets](https://softloud.github.io/sysrevdata/index.html) for more information about the data.
 
 ```{r}
 
@@ -63,8 +63,6 @@ hazard %>%
   pull(hazard)
 
 ```
-
-### Long
 
 
 ## What structure do I need?

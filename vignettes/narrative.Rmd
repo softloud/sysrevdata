@@ -29,7 +29,11 @@ However, in practical terms, our workflow will be informed by what structure of 
 
 ### From wide
 
-For an example of wide, we'll use the `bufferstrips` data table. There are too many variables for us to create a narrative table of all variables, but we can create a narrative table for a given element by condensing that element. 
+For an example of wide, we'll use the `bufferstrips` data table. See the [example datasets](https://softloud.github.io/sysrevdata/index.html) for more information about the data.
+
+
+
+There are too many variables for us to create a narrative table of all variables, but we can create a narrative table for a given element by condensing that element. 
 
 Consider if we were interested in the farming production system. We will retain the short title as an identifier.
 
@@ -44,6 +48,8 @@ farming_prod <-
     col = "farming_production_system",
     # columns to condense
     contains("farmingproductionsystem"),
+    # set separator
+    sep = " ||| ",
     # remove NAs
     na.rm = TRUE)
 
@@ -53,7 +59,7 @@ farming_prod <-
 We still have a fairly large table, however.
 
 ```{r}
-# display rows and columsn of dataframe
+# display rows and columns of dataframe
 farming_prod %>% 
   dim()
 

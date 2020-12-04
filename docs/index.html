@@ -85,6 +85,18 @@
 
 <p>The goal of sysrevdata is to provide examples and extensible tools for structuring data for systematic review.</p>
 <p>See vignettes for example toolchain walkthroughs.</p>
+<div id="vignettes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#vignettes" class="anchor"></a>Vignettes</h2>
+<ul>
+<li>
+<a href="https://softloud.github.io/sysrevdata/articles/data-structures.html">data structures</a> What data do I want? What data do I have?</li>
+<li>
+<a href="https://softloud.github.io/sysrevdata/articles/narrative.html">narrative</a> Condensed summaries of data for human interpretation</li>
+<li>
+<a href="https://softloud.github.io/sysrevdata/articles/analytical.html">analytical</a> Structuring data for machine interpretation</li>
+</ul>
+</div>
 <div id="example-datasets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-datasets" class="anchor"></a>Example datasets</h2>
@@ -97,7 +109,7 @@
 
 <span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
   <span class="co"># select first five columns</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
   <span class="co"># select first 10 rows</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
 <span class="co">#&gt; # A tibble: 10 x 5</span>
@@ -115,7 +127,7 @@
 <span class="co">#&gt; 10 20641398 Anan'eva (200… Comparative assessment of soil microbi…  2008 2005-2…</span>
 
 <span class="no">hazard</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
 <span class="co">#&gt; # A tibble: 10 x 5</span>
 <span class="co">#&gt;    article_id region title               authors             hazard             </span>
