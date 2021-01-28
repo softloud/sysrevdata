@@ -81,7 +81,7 @@ column separated into a different column." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +132,7 @@ column separated into a different column." />
 column separated into a different column.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>long_to_wide</span>(<span class='no'>data</span>, <span class='no'>columns</span>, <span class='kw'>name_sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='kw'>value_sep</span> <span class='kw'>=</span> <span class='st'>";"</span>)</pre>
+    <pre class="usage"><span class='fu'>long_to_wide</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>columns</span>, name_sep <span class='op'>=</span> <span class='st'>"_"</span>, value_sep <span class='op'>=</span> <span class='st'>";"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,7 +162,8 @@ default is set to ';'.</p></td>
     <p>A dataframe in 'wide' format.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>wide_data2</span> <span class='kw'>&lt;-</span> <span class='fu'>long_to_wide</span>(<span class='no'>long_data</span>, <span class='no'>columns</span>, <span class='kw'>value_sep</span> <span class='kw'>=</span> <span class='st'>'xxx'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in long_to_wide(long_data, columns, value_sep = "xxx"): object 'columns' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>wide_data2</span> <span class='op'>&lt;-</span> <span class='fu'>long_to_wide</span><span class='op'>(</span><span class='va'>long_data</span>, <span class='va'>columns</span>, value_sep <span class='op'>=</span> <span class='st'>'xxx'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in long_to_wide(long_data, columns, value_sep = "xxx"): object 'columns' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -178,7 +179,7 @@ default is set to ';'.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

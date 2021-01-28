@@ -1,6 +1,8 @@
 ---
 title: "narrative"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{narrative}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,69 +14,204 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+options(encoding="latin1")
 ```
 
 ```{r setup, message=FALSE}
+# packages used in this toolchain walkthrough
 library(sysrevdata)
 library(tidyverse)
+library(kableExtra)
+library(janitor)
+
+conflicted::conflict_prefer("filter", "dplyr")
 ```
 
-## Constructing a narrative table
 
-In contract to structuring data for machines, a narrative table is for summarising data to be interpreted by a human reader. 
+## creating a narrative synthesis table
 
-This may involve engineering the data for the summary results required and filtering to results that can be displayed on a printed page. These decisions are informed by what information is most important to highlight from the dataset. 
-
-However, in practical terms, our workflow will be informed by what structure of data we begin with. Here we consider a wide to narrative table.
-
-### From wide
-
-For an example of wide, we'll use the `bufferstrips` data table. See the [example datasets](https://softloud.github.io/sysrevdata/index.html) for more information about the data.
+The objective of a narrative synthesis is to summarise each study considered in the systematic review in an easy to read table:
 
 
+**Rows** | One study per row.
 
-There are too many variables for us to create a narrative table of all variables, but we can create a narrative table for a given element by condensing that element. 
+**Columns** | Metadata and summarised observations.
 
-Consider if we were interested in the farming production system. We will retain the short title as an identifier.
+As the number of studies increase, and the number of variables considered multiply, this poses a challenge for fitting the table into a succinct readable format. 
+
+Here we consider ways we can condense and format data for presentation for humans to read, as opposed to machine-readable data for analysis and complex visualisation.
+
+We may begin with sparsely-filled wide data or long-format machine-structured data, neither of which are good for publication or interpretation by human readers. So, we will consider how to condense these structures in turn, before demonstrating how to format the output.
+
+> todo later link to other vignette
+
+## condensing from wide data
+
+We'll use `bufferstrips`, which can be loaded from `sysrevdata`, to investigate this. These data are in a wide and sparse format, useful for creating systematic maps. We'll restrict ourselves to the first 5 studies with `head(5)` as we work through these examples, so this document doesn't run too long. 
 
 ```{r}
+buffer_example <-
+  bufferstrips %>% 
+  head(5)
+```
 
-farming_prod <-
-  bufferstrips %>%
+
+To see how these data are sparse and wide, we will extract the abbreviated title, year, and the columns that contain observations relating to spatial scale. 
+
+```{r}
+buffer_example %>% 
+  select(short_title, contains("spatial"))
+```
+
+
+> solve encoding problems in title/author fields
+
+When we format these data (which we'll provide toolchains for at the end), the wideness becomes an issue. And this is with only the spatial variables (columns) selected. The table is unwieldy, large, and filled with white space. 
+
+```{r echo=FALSE}
+buffer_example %>%
+  mutate(across(everything(), replace_na, "")) %>%
+  select(short_title, contains("spatial")) %>%
+  kable() 
+```
+
+To solve the wideness issue, we'll condense the variables. Here's a way of doing this for the spatial variable. 
+
+```{r}
+buffer_example %>%
   # choose the desired columns
-  select(short_title, contains("farmingproductionsystem")) %>%
-  # condense variableal
+  select(short_title, contains("spatialscale")) %>%
+  # condense variable
   unite(# name condensed column
-    col = "farming_production_system",
+    col = "spatialscale",
     # columns to condense
-    contains("farmingproductionsystem"),
+    contains("spatialscale"),
     # set separator
-    sep = " ||| ",
+    sep = "; ",
     # remove NAs
     na.rm = TRUE)
 
-
 ```
 
-We still have a fairly large table, however.
+But, of course, we wish to do this for all of the variables. The table contains columns that don't need condensing, such as title, year, and so forth. 
 
 ```{r}
-# display rows and columns of dataframe
-farming_prod %>% 
-  dim()
-
+buffer_example %>% 
+  names() %>% cat()
 ```
 
-So, we might summarise it by displaying the ten most common types of farming production.
+
+
+Our first task is to identify the columns that have common prefixes, that is, columns that share a common first string. 
+
 
 ```{r}
-farming_prod %>% 
-  # count types of farming production system
-    count(farming_production_system) %>%
-  # order by the count
-  arrange(desc(n)) %>% 
-  head(10)
+(
+  variables_to_condense <-
+    # extract the prefix of each column
+    # i.e., the string before the first _
+    buffer_example %>%
+    # we can exclude the column names that don't contain _
+    select(contains("_")) %>%
+    # get column names
+    names() %>%
+    # extract the word before the first _
+    str_extract("[a-z]*") %>% {
+      # convert to a tibble so we can use count
+      tibble(variables = .)
+    } %>%
+    # count how many instances
+    count(variables) %>%
+    # filter out the unique variables we won't condense
+    filter(n > 1) %>%
+    # convert to a vector
+    pull(variables)
+)
 
 ```
 
+Now we adapt the code we used to condense the variables to a function.
 
+```{r}
+condense_variable <-
+function(variable_to_condense, df) {
+  buffer_example %>%
+    # choose the desired columns
+    select(contains(variable_to_condense)) %>%
+    # condense variable
+    unite(# name condensed column
+      col = !!variable_to_condense,
+      # columns to condense
+      contains(variable_to_condense),
+      # set separator
+      sep = "; ",
+      # remove NAs
+      na.rm = TRUE)
+}
+
+condense_variable("spatialscale")
+  
+```
+
+Next we apply our function to every variable we wish to condense and combine the results into a new table of condensed variables.
+
+```{r message=FALSE}
+(
+condensed_buffer_example <-
+variables_to_condense %>%
+  # apply the function to each variable we wish to condense, producing a list of dataframes
+  map(condense_variable) %>% 
+  # bind the columns together, with the short title as the first column
+  bind_cols(
+    buffer_example %>% select(short_title), .
+  )
+)
+
+```
+
+## condensing from long data
+
+> todolater show toolchain of getting from long to condensed
+
+## formatting for output
+
+```{r}
+condensed_buffer_example %>% 
+  # converts dataframe to an html output table
+  kable() %>% 
+  # useful function for customising table formatting
+  kable_styling(
+    bootstrap_options = "striped", 
+    font_size = 6)
+
+```
+
+We can present this with a separate table of metadata, using the short title as the reference. We'll combine the googlescholar link with the title.
+
+```{r}
+study_descriptions <-
+buffer_example %>% 
+  # combine the google scholar link in a way that will be rendered as a clickable link 
+  mutate(title = str_c("[", title, "](",google_scholar_link,")")) %>% 
+  select(-contains(variables_to_condense),
+         -google_scholar_link) 
+
+study_descriptions %>% 
+  kable() %>% 
+  kable_styling("striped",
+                font_size = 6)
+
+
+```
+
+And, if we are happy to have a wider table, we can combine both tables together to form one narrative synthesis table with all variables condensed. Although wide, it is not as wide or sparse as where we started, and is much easier to read.
+
+```{r}
+full_join(study_descriptions, condensed_buffer_example,
+          by = "short_title") %>% 
+  kable() %>% 
+   kable_styling("striped",
+                font_size = 6)
+
+```

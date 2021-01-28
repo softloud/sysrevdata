@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,17 +101,18 @@
 <h2 class="hasAnchor">
 <a href="#example-datasets" class="anchor"></a>Example datasets</h2>
 <p>This package currently contains two example datasets from published open systematic reviews.</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sysrevdata</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">sysrevdata</span><span class="op">)</span>
 
 <span class="co"># take a peek at the first 10 rows, </span>
 <span class="co"># restricted to first 5 columns, </span>
 <span class="co"># of each dataset</span>
 
-<span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
+<span class="va">bufferstrips</span> <span class="op">%&gt;%</span>
   <span class="co"># select first five columns</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># select first 10 rows</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 10 x 5</span>
 <span class="co">#&gt;     item_id short_title    title                                    year period </span>
 <span class="co">#&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;                                   &lt;dbl&gt; &lt;chr&gt;  </span>
@@ -125,10 +126,10 @@
 <span class="co">#&gt;  8 20641390 Al (2013)      Does the presence of grassy strips and…  2013 2010-2…</span>
 <span class="co">#&gt;  9 20641397 Alignier (201… Changes in management practices over t…  2015 2015-2…</span>
 <span class="co">#&gt; 10 20641398 Anan'eva (200… Comparative assessment of soil microbi…  2008 2005-2…</span>
-
-<span class="no">hazard</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
+  
+<span class="va">hazard</span> <span class="op">%&gt;%</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 10 x 5</span>
 <span class="co">#&gt;    article_id region title               authors             hazard             </span>
 <span class="co">#&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;              </span>
@@ -141,7 +142,7 @@
 <span class="co">#&gt;  7    6205484 Africa Adaptation and res… Tambo, JA           General climate im…</span>
 <span class="co">#&gt;  8    6205485 Africa Perception of and … Bedeke, SB; Vanhov… General climate im…</span>
 <span class="co">#&gt;  9    6205486 Africa Diversification an… Zorom, M; Barbier,… General climate im…</span>
-<span class="co">#&gt; 10    6205487 Africa Adapting agricultu… Bryan, E; Ringler,… Extreme precipitat…</span></pre></div>
+<span class="co">#&gt; 10    6205487 Africa Adapting agricultu… Bryan, E; Ringler,… Extreme precipitat…</span></code></pre></div>
 <p>See</p>
 <ul>
 <li><code><a href="reference/bufferstrips.html">?bufferstrips</a></code></li>
@@ -158,8 +159,9 @@
 <!-- ``` -->
 <!-- And  -->
 <p>the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"softloud/sysrevdata"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"softloud/sysrevdata"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="contributing-to-this" class="section level1">
@@ -201,7 +203,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

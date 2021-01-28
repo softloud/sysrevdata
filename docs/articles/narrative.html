@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -75,7 +75,8 @@
 
       
 
-      </header><script src="narrative_files/header-attrs-2.3/header-attrs.js"></script><script src="narrative_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="narrative_files/header-attrs-2.6/header-attrs.js"></script><script src="narrative_files/kePrint-0.0.1/kePrint.js"></script><link href="narrative_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>narrative</h1>
@@ -88,60 +89,1064 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sysrevdata</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyverse</span>)</pre></body></html></div>
-<div id="constructing-a-narrative-table" class="section level2">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># packages used in this toolchain walkthrough</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">sysrevdata</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
+
+<span class="fu">conflicted</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/conflicted/man/conflict_prefer.html">conflict_prefer</a></span><span class="op">(</span><span class="st">"filter"</span>, <span class="st">"dplyr"</span><span class="op">)</span></code></pre></div>
+<div id="creating-a-narrative-synthesis-table" class="section level2">
 <h2 class="hasAnchor">
-<a href="#constructing-a-narrative-table" class="anchor"></a>Constructing a narrative table</h2>
-<p>In contract to structuring data for machines, a narrative table is for summarising data to be interpreted by a human reader.</p>
-<p>This may involve engineering the data for the summary results required and filtering to results that can be displayed on a printed page. These decisions are informed by what information is most important to highlight from the dataset.</p>
-<p>However, in practical terms, our workflow will be informed by what structure of data we begin with. Here we consider a wide to narrative table.</p>
-<div id="from-wide" class="section level3">
-<h3 class="hasAnchor">
-<a href="#from-wide" class="anchor"></a>From wide</h3>
-<p>For an example of wide, we’ll use the <code>bufferstrips</code> data table. See the <a href="https://softloud.github.io/sysrevdata/index.html">example datasets</a> for more information about the data.</p>
-<p>There are too many variables for us to create a narrative table of all variables, but we can create a narrative table for a given element by condensing that element.</p>
-<p>Consider if we were interested in the farming production system. We will retain the short title as an identifier.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r">
-<span class="no">farming_prod</span> <span class="kw">&lt;-</span>
-  <span class="no">bufferstrips</span> <span class="kw">%&gt;%</span>
-  <span class="co"># choose the desired columns</span>
-  <span class="fu">select</span>(<span class="no">short_title</span>, <span class="fu">contains</span>(<span class="st">"farmingproductionsystem"</span>)) <span class="kw">%&gt;%</span>
-  <span class="co"># condense variableal</span>
-  <span class="fu">unite</span>(<span class="co"># name condensed column</span>
-    <span class="kw">col</span> <span class="kw">=</span> <span class="st">"farming_production_system"</span>,
-    <span class="co"># columns to condense</span>
-    <span class="fu">contains</span>(<span class="st">"farmingproductionsystem"</span>),
-    <span class="co"># set separator</span>
-    <span class="kw">sep</span> <span class="kw">=</span> <span class="st">" ||| "</span>,
-    <span class="co"># remove NAs</span>
-    <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
-<p>We still have a fairly large table, however.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># display rows and columns of dataframe</span>
-<span class="no">farming_prod</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>()
-<span class="co">#&gt; [1] 1072    2</span></pre></body></html></div>
-<p>So, we might summarise it by displaying the ten most common types of farming production.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">farming_prod</span> <span class="kw">%&gt;%</span>
-  <span class="co"># count types of farming production system</span>
-    <span class="fu">count</span>(<span class="no">farming_production_system</span>) <span class="kw">%&gt;%</span>
-  <span class="co"># order by the count</span>
-  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">n</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)
-<span class="co">#&gt; # A tibble: 10 x 2</span>
-<span class="co">#&gt;    farming_production_system                    n</span>
-<span class="co">#&gt;    &lt;chr&gt;                                    &lt;int&gt;</span>
-<span class="co">#&gt;  1 Cropped fields (arable)                    196</span>
-<span class="co">#&gt;  2 Not described                              148</span>
-<span class="co">#&gt;  3 Livestock                                   41</span>
-<span class="co">#&gt;  4 Livestock ||| Cropped fields (arable)       37</span>
-<span class="co">#&gt;  5 Cropped fields (arable) ||| Grassland       29</span>
-<span class="co">#&gt;  6 Cropped fields (arable) ||| Corn            18</span>
-<span class="co">#&gt;  7 Cropped fields (arable) ||| Wheat           17</span>
-<span class="co">#&gt;  8 Grassland                                   14</span>
-<span class="co">#&gt;  9 Cropped fields (arable) ||| Maize           13</span>
-<span class="co">#&gt; 10 Cropped fields (arable) ||| Winter wheat    12</span></pre></body></html></div>
+<a href="#creating-a-narrative-synthesis-table" class="anchor"></a>creating a narrative synthesis table</h2>
+<p>The objective of a narrative synthesis is to summarise each study considered in the systematic review in an easy to read table:</p>
+<p><strong>Rows</strong> | One study per row.</p>
+<p><strong>Columns</strong> | Metadata and summarised observations.</p>
+<p>As the number of studies increase, and the number of variables considered multiply, this poses a challenge for fitting the table into a succinct readable format.</p>
+<p>Here we consider ways we can condense and format data for presentation for humans to read, as opposed to machine-readable data for analysis and complex visualisation.</p>
+<p>We may begin with sparsely-filled wide data or long-format machine-structured data, neither of which are good for publication or interpretation by human readers. So, we will consider how to condense these structures in turn, before demonstrating how to format the output.</p>
+<blockquote>
+<p>todo later link to other vignette</p>
+</blockquote>
 </div>
+<div id="condensing-from-wide-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#condensing-from-wide-data" class="anchor"></a>condensing from wide data</h2>
+<p>We’ll use <code>bufferstrips</code>, which can be loaded from <code>sysrevdata</code>, to investigate this. These data are in a wide and sparse format, useful for creating systematic maps. We’ll restrict ourselves to the first 5 studies with <code><a href="https://rdrr.io/r/utils/head.html">head(5)</a></code> as we work through these examples, so this document doesn’t run too long.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">buffer_example</span> <span class="op">&lt;-</span>
+  <span class="va">bufferstrips</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p>To see how these data are sparse and wide, we will extract the abbreviated title, year, and the columns that contain observations relating to spatial scale.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">buffer_example</span> <span class="op">%&gt;%</span> 
+  <span class="fu">select</span><span class="op">(</span><span class="va">short_title</span>, <span class="fu">contains</span><span class="op">(</span><span class="st">"spatial"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 5 x 7</span>
+<span class="co">#&gt;   short_title spatialscale_pl… spatialscale_fi… spatialscale_fa…</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;           </span>
+<span class="co">#&gt; 1 Aaron (200… &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 2 Aavik (200… &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 3 Aavik (201… &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 4 Abu-Zreig … Plot scale       &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 5 Abu-Zreig … Plot scale       &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; # … with 3 more variables: spatialscale_catchment &lt;chr&gt;,</span>
+<span class="co">#&gt; #   spatialscale_regional &lt;chr&gt;, spatialscale_notdescribed &lt;chr&gt;</span></code></pre></div>
+<blockquote>
+<p>solve encoding problems in title/author fields</p>
+</blockquote>
+<p>When we format these data (which we’ll provide toolchains for at the end), the wideness becomes an issue. And this is with only the spatial variables (columns) selected. The table is unwieldy, large, and filled with white space.</p>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+short_title
+</th>
+<th style="text-align:left;">
+spatialscale_plot
+</th>
+<th style="text-align:left;">
+spatialscale_field
+</th>
+<th style="text-align:left;">
+spatialscale_farm
+</th>
+<th style="text-align:left;">
+spatialscale_catchment
+</th>
+<th style="text-align:left;">
+spatialscale_regional
+</th>
+<th style="text-align:left;">
+spatialscale_notdescribed
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Catchment scale
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aavik (2008)
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aavik (2010)
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Abu-Zreig (2004)
+</td>
+<td style="text-align:left;">
+Plot scale
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Abu-Zreig (2003)
+</td>
+<td style="text-align:left;">
+Plot scale
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>To solve the wideness issue, we’ll condense the variables. Here’s a way of doing this for the spatial variable.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">buffer_example</span> <span class="op">%&gt;%</span>
+  <span class="co"># choose the desired columns</span>
+  <span class="fu">select</span><span class="op">(</span><span class="va">short_title</span>, <span class="fu">contains</span><span class="op">(</span><span class="st">"spatialscale"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="co"># condense variable</span>
+  <span class="fu">unite</span><span class="op">(</span><span class="co"># name condensed column</span>
+    col <span class="op">=</span> <span class="st">"spatialscale"</span>,
+    <span class="co"># columns to condense</span>
+    <span class="fu">contains</span><span class="op">(</span><span class="st">"spatialscale"</span><span class="op">)</span>,
+    <span class="co"># set separator</span>
+    sep <span class="op">=</span> <span class="st">"; "</span>,
+    <span class="co"># remove NAs</span>
+    na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 5 x 2</span>
+<span class="co">#&gt;   short_title      spatialscale                   </span>
+<span class="co">#&gt;   &lt;chr&gt;            &lt;chr&gt;                          </span>
+<span class="co">#&gt; 1 Aaron (2005)     Catchment scale; Regional scale</span>
+<span class="co">#&gt; 2 Aavik (2008)     Regional scale                 </span>
+<span class="co">#&gt; 3 Aavik (2010)     Regional scale                 </span>
+<span class="co">#&gt; 4 Abu-Zreig (2004) Plot scale                     </span>
+<span class="co">#&gt; 5 Abu-Zreig (2003) Plot scale</span></code></pre></div>
+<p>But, of course, we wish to do this for all of the variables. The table contains columns that don’t need condensing, such as title, year, and so forth.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">buffer_example</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; item_id short_title title year period google_scholar_link vegetated_strip_description nation study_country study_location latitute longitude studydesign_observational studydesign_manipulative Study length (years) Time since intervention (years) spatialscale_plot spatialscale_field spatialscale_farm spatialscale_catchment spatialscale_regional spatialscale_notdescribed measurementquarter_Q1 measurementquarter_Q2 measurementquarter_Q3 measurementquarter_Q4 measurementquarter_notdescribed farmingsystem_conventional farmingsystem_organic farmingsystem_notdescribed farmingproductionsystem_livestock farmingproductionsystem_livestockinfo farmingproductionsystem_croppedfields farmingproductionsystem_croppedfieldsinfo farmingproductionsystem_horticulture farmingproductionsystem_horticultureinfo farmingproductionsystem_viticulture farmingproductionsystem_viticultureinfo farmingproductionsystem_fruit farmingproductionsystem_fruitinfo farmingproductionsystem_grassland farmingproductionsystem_grasslandinfo farmingproductionsystem_other farmingproductionsystem_otherinfo farmingproductionsystem_notdescribed farmingproductionsystem_notdescribedinfo vegetationtype_grasses vegetationtype_grassesinfo vegetationtype_wildflowers vegetationtype_wildflowersinfo vegetationtype_shrubs vegetationtype_shrubsinfo vegetationtype_hedgerow vegetationtype_hedgerowinfo vegetationtype_trees vegetationtype_treesinfo vegetationtype_other vegetationtype_otherinfo vegetationtype_notdescribed vegetationtype_notdescribedinfo striplocation_withinfield striplocation_fieldedge striplocation_riparian striplocation_notdescribed stripmanagement_unmanaged stripmanagement_unmanagedinfo stripmanagement_soilamendment stripmanagement_soilamendmentinfo stripmanagement_soildisturbed stripmanagement_soildisturbedinfo stripmanagement_cut stripmanagement_cutinfo stripmanagement_grazed stripmanagement_grazedinfo stripmanagement_harvested stripmanagement_harvestedinfo stripmanagement_sownplanted stripmanagement_sownplantedinfo stripmanagement_pesticide stripmanagement_pesticideinfo stripmanagement_managedother stripmanagement_managedotherinfo stripmanagement_notdescribed stripmanagement_notdescribedinfo</span></code></pre></div>
+<p>Our first task is to identify the columns that have common prefixes, that is, columns that share a common first string.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span>
+  <span class="va">variables_to_condense</span> <span class="op">&lt;-</span>
+    <span class="co"># extract the prefix of each column</span>
+    <span class="co"># i.e., the string before the first _</span>
+    <span class="va">buffer_example</span> <span class="op">%&gt;%</span>
+    <span class="co"># we can exclude the column names that don't contain _</span>
+    <span class="fu">select</span><span class="op">(</span><span class="fu">contains</span><span class="op">(</span><span class="st">"_"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="co"># get column names</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="co"># extract the word before the first _</span>
+    <span class="fu">str_extract</span><span class="op">(</span><span class="st">"[a-z]*"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="op">{</span>
+      <span class="co"># convert to a tibble so we can use count</span>
+      <span class="fu">tibble</span><span class="op">(</span>variables <span class="op">=</span> <span class="va">.</span><span class="op">)</span>
+    <span class="op">}</span> <span class="op">%&gt;%</span>
+    <span class="co"># count how many instances</span>
+    <span class="fu">count</span><span class="op">(</span><span class="va">variables</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="co"># filter out the unique variables we won't condense</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="co"># convert to a vector</span>
+    <span class="fu">pull</span><span class="op">(</span><span class="va">variables</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="co">#&gt; [1] "farmingproductionsystem" "farmingsystem"          </span>
+<span class="co">#&gt; [3] "measurementquarter"      "spatialscale"           </span>
+<span class="co">#&gt; [5] "striplocation"           "stripmanagement"        </span>
+<span class="co">#&gt; [7] "study"                   "studydesign"            </span>
+<span class="co">#&gt; [9] "vegetationtype"</span></code></pre></div>
+<p>Now we adapt the code we used to condense the variables to a function.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">condense_variable</span> <span class="op">&lt;-</span>
+<span class="kw">function</span><span class="op">(</span><span class="va">variable_to_condense</span>, <span class="va">df</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">buffer_example</span> <span class="op">%&gt;%</span>
+    <span class="co"># choose the desired columns</span>
+    <span class="fu">select</span><span class="op">(</span><span class="fu">contains</span><span class="op">(</span><span class="va">variable_to_condense</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="co"># condense variable</span>
+    <span class="fu">unite</span><span class="op">(</span><span class="co"># name condensed column</span>
+      col <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">variable_to_condense</span>,
+      <span class="co"># columns to condense</span>
+      <span class="fu">contains</span><span class="op">(</span><span class="va">variable_to_condense</span><span class="op">)</span>,
+      <span class="co"># set separator</span>
+      sep <span class="op">=</span> <span class="st">"; "</span>,
+      <span class="co"># remove NAs</span>
+      na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="fu">condense_variable</span><span class="op">(</span><span class="st">"spatialscale"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 5 x 1</span>
+<span class="co">#&gt;   spatialscale                   </span>
+<span class="co">#&gt;   &lt;chr&gt;                          </span>
+<span class="co">#&gt; 1 Catchment scale; Regional scale</span>
+<span class="co">#&gt; 2 Regional scale                 </span>
+<span class="co">#&gt; 3 Regional scale                 </span>
+<span class="co">#&gt; 4 Plot scale                     </span>
+<span class="co">#&gt; 5 Plot scale</span></code></pre></div>
+<p>Next we apply our function to every variable we wish to condense and combine the results into a new table of condensed variables.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span>
+<span class="va">condensed_buffer_example</span> <span class="op">&lt;-</span>
+<span class="va">variables_to_condense</span> <span class="op">%&gt;%</span>
+  <span class="co"># apply the function to each variable we wish to condense, producing a list of dataframes</span>
+  <span class="fu">map</span><span class="op">(</span><span class="va">condense_variable</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="co"># bind the columns together, with the short title as the first column</span>
+  <span class="fu">bind_cols</span><span class="op">(</span>
+    <span class="va">buffer_example</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">short_title</span><span class="op">)</span>, <span class="va">.</span>
+  <span class="op">)</span>
+<span class="op">)</span>
+<span class="co">#&gt; # A tibble: 5 x 10</span>
+<span class="co">#&gt;   short_title farmingproducti… farmingsystem measurementquar… spatialscale</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;       </span>
+<span class="co">#&gt; 1 Aaron (200… Not described    Not described Q1; Q2           Catchment s…</span>
+<span class="co">#&gt; 2 Aavik (200… Livestock; Crop… Not described Not described    Regional sc…</span>
+<span class="co">#&gt; 3 Aavik (201… Other (please s… Conventional… Q2; Q3           Regional sc…</span>
+<span class="co">#&gt; 4 Abu-Zreig … Not described    Not described Not described    Plot scale  </span>
+<span class="co">#&gt; 5 Abu-Zreig … Not described    Not described Not described    Plot scale  </span>
+<span class="co">#&gt; # … with 5 more variables: striplocation &lt;chr&gt;, stripmanagement &lt;chr&gt;,</span>
+<span class="co">#&gt; #   study &lt;chr&gt;, studydesign &lt;chr&gt;, vegetationtype &lt;chr&gt;</span></code></pre></div>
+</div>
+<div id="condensing-from-long-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#condensing-from-long-data" class="anchor"></a>condensing from long data</h2>
+<blockquote>
+<p>todolater show toolchain of getting from long to condensed</p>
+</blockquote>
+</div>
+<div id="formatting-for-output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#formatting-for-output" class="anchor"></a>formatting for output</h2>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">condensed_buffer_example</span> <span class="op">%&gt;%</span> 
+  <span class="co"># converts dataframe to an html output table</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="co"># useful function for customising table formatting</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>
+    bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>, 
+    font_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+<table class="table table table-striped">
+<thead><tr>
+<th style="text-align:left;">
+short_title
+</th>
+<th style="text-align:left;">
+farmingproductionsystem
+</th>
+<th style="text-align:left;">
+farmingsystem
+</th>
+<th style="text-align:left;">
+measurementquarter
+</th>
+<th style="text-align:left;">
+spatialscale
+</th>
+<th style="text-align:left;">
+striplocation
+</th>
+<th style="text-align:left;">
+stripmanagement
+</th>
+<th style="text-align:left;">
+study
+</th>
+<th style="text-align:left;">
+studydesign
+</th>
+<th style="text-align:left;">
+vegetationtype
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Q1; Q2
+</td>
+<td style="text-align:left;">
+Catchment scale; Regional scale
+</td>
+<td style="text-align:left;">
+Riparian
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Maryland, USA; Cattail Creek, Hawling’s River, Northwest Branch, Paint Branch of Chesapeake Bay Watershed, Maryland; Observational; 2
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aavik (2008)
+</td>
+<td style="text-align:left;">
+Livestock; Cropped fields (arable)
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Field edge
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Estonia; Vaike-Maarja, Are, Vihtra, Virratsi, Abja-Paluoja and Ilmatsalu; Observational; Not stated
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aavik (2010)
+</td>
+<td style="text-align:left;">
+Other (please specify); Mixed conventional and organic, multiple farms (not described)
+</td>
+<td style="text-align:left;">
+Conventional; Organic
+</td>
+<td style="text-align:left;">
+Q2; Q3
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Field edge
+</td>
+<td style="text-align:left;">
+Not described; regional study with limited details on single vegetated strips
+</td>
+<td style="text-align:left;">
+Estonia; Tartu County; Observational; &lt;1
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Hedgerow; Other (please specify); road boundaris; grassland-adjacent boundaries; ditch verges; ditch verges with trees and bushes; woody boundaries, forest edges, tree lines and hedgerows; road verges with trees and shrubs
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Abu-Zreig (2004)
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Plot scale
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not stated; Not stated; Manipulative; &lt;1
+</td>
+<td style="text-align:left;">
+Manipulative
+</td>
+<td style="text-align:left;">
+Grasses; Perennial rye grass; Other (please specify); Creeping red fescue, birdsfoot trefoil, native riparian vegetation (wild oat, quack, fescue, dandelions, etc.)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Abu-Zreig (2003)
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Plot scale
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Ontario, Canada; Elora, Ontario; Manipulative; &lt;1
+</td>
+<td style="text-align:left;">
+Manipulative
+</td>
+<td style="text-align:left;">
+Grasses; Other (please specify); Perennial ryegrass, legume and creeping red fescue, native grass species
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can present this with a separate table of metadata, using the short title as the reference. We’ll combine the googlescholar link with the title.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">study_descriptions</span> <span class="op">&lt;-</span>
+<span class="va">buffer_example</span> <span class="op">%&gt;%</span> 
+  <span class="co"># combine the google scholar link in a way that will be rendered as a clickable link </span>
+  <span class="fu">mutate</span><span class="op">(</span>title <span class="op">=</span> <span class="fu">str_c</span><span class="op">(</span><span class="st">"["</span>, <span class="va">title</span>, <span class="st">"]("</span>,<span class="va">google_scholar_link</span>,<span class="st">")"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="fu">contains</span><span class="op">(</span><span class="va">variables_to_condense</span><span class="op">)</span>,
+         <span class="op">-</span><span class="va">google_scholar_link</span><span class="op">)</span> 
+
+<span class="va">study_descriptions</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="st">"striped"</span>,
+                font_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+<table class="table table table-striped">
+<thead><tr>
+<th style="text-align:right;">
+item_id
+</th>
+<th style="text-align:left;">
+short_title
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:left;">
+period
+</th>
+<th style="text-align:left;">
+vegetated_strip_description
+</th>
+<th style="text-align:left;">
+nation
+</th>
+<th style="text-align:left;">
+latitute
+</th>
+<th style="text-align:left;">
+longitude
+</th>
+<th style="text-align:left;">
+Time since intervention (years)
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+20641367
+</td>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Invertebrate Biodiversity in Agricultural and Urban Headwater Streams: Implications for Conservation and Management</a>
+</td>
+<td style="text-align:right;">
+2005
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+Riparian buffer
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+39.045755
+</td>
+<td style="text-align:left;">
+-76.641271
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641374
+</td>
+<td style="text-align:left;">
+Aavik (2008)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=What+is+the+role+of+local+landscape+structure+in+the+vegetation+composition+of+field+boundaries?&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">What is the role of local landscape structure in the vegetation composition of field boundaries?</a>
+</td>
+<td style="text-align:right;">
+2008
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+Field boundary
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+58.595272
+</td>
+<td style="text-align:left;">
+25.013607
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641375
+</td>
+<td style="text-align:left;">
+Aavik (2010)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Quantifying+the+effect+of+organic+farming,+field+boundary+type+and+landscape+structure+on+the+vegeta&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Quantifying the effect of organic farming, field boundary type and landscape structure on the vegetation of field boundaries</a>
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+2010-2014
+</td>
+<td style="text-align:left;">
+Field boundary
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+58.405713
+</td>
+<td style="text-align:left;">
+26.801576
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641382
+</td>
+<td style="text-align:left;">
+Abu-Zreig (2004)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Experimental+investigation+of+runoff+reduction+and+sediment+removal+by+vegetated+filter+strips&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Experimental investigation of runoff reduction and sediment removal by vegetated filter strips</a>
+</td>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:left;">
+2000-2004
+</td>
+<td style="text-align:left;">
+Vegetated filter strip
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+not stated
+</td>
+<td style="text-align:left;">
+not stated
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641384
+</td>
+<td style="text-align:left;">
+Abu-Zreig (2003)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Phosphorus+removal+in+vegetated+filter+strips&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Phosphorus removal in vegetated filter strips</a>
+</td>
+<td style="text-align:right;">
+2003
+</td>
+<td style="text-align:left;">
+2000-2004
+</td>
+<td style="text-align:left;">
+Vegetated filter strip
+</td>
+<td style="text-align:left;">
+Canada
+</td>
+<td style="text-align:left;">
+43.683715
+</td>
+<td style="text-align:left;">
+-80.430543
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+</tr>
+</tbody>
+</table>
+<p>And, if we are happy to have a wider table, we can combine both tables together to form one narrative synthesis table with all variables condensed. Although wide, it is not as wide or sparse as where we started, and is much easier to read.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">full_join</span><span class="op">(</span><span class="va">study_descriptions</span>, <span class="va">condensed_buffer_example</span>,
+          by <span class="op">=</span> <span class="st">"short_title"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="st">"striped"</span>,
+                font_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+<table class="table table table-striped">
+<thead><tr>
+<th style="text-align:right;">
+item_id
+</th>
+<th style="text-align:left;">
+short_title
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:left;">
+period
+</th>
+<th style="text-align:left;">
+vegetated_strip_description
+</th>
+<th style="text-align:left;">
+nation
+</th>
+<th style="text-align:left;">
+latitute
+</th>
+<th style="text-align:left;">
+longitude
+</th>
+<th style="text-align:left;">
+Time since intervention (years)
+</th>
+<th style="text-align:left;">
+farmingproductionsystem
+</th>
+<th style="text-align:left;">
+farmingsystem
+</th>
+<th style="text-align:left;">
+measurementquarter
+</th>
+<th style="text-align:left;">
+spatialscale
+</th>
+<th style="text-align:left;">
+striplocation
+</th>
+<th style="text-align:left;">
+stripmanagement
+</th>
+<th style="text-align:left;">
+study
+</th>
+<th style="text-align:left;">
+studydesign
+</th>
+<th style="text-align:left;">
+vegetationtype
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+20641367
+</td>
+<td style="text-align:left;">
+Aaron (2005)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Invertebrate+Biodiversity+in+Agricultural+and+Urban+Headwater+Streams:+Implications+for+Conservation&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Invertebrate Biodiversity in Agricultural and Urban Headwater Streams: Implications for Conservation and Management</a>
+</td>
+<td style="text-align:right;">
+2005
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+Riparian buffer
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+39.045755
+</td>
+<td style="text-align:left;">
+-76.641271
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Q1; Q2
+</td>
+<td style="text-align:left;">
+Catchment scale; Regional scale
+</td>
+<td style="text-align:left;">
+Riparian
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Maryland, USA; Cattail Creek, Hawling’s River, Northwest Branch, Paint Branch of Chesapeake Bay Watershed, Maryland; Observational; 2
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641374
+</td>
+<td style="text-align:left;">
+Aavik (2008)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=What+is+the+role+of+local+landscape+structure+in+the+vegetation+composition+of+field+boundaries?&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">What is the role of local landscape structure in the vegetation composition of field boundaries?</a>
+</td>
+<td style="text-align:right;">
+2008
+</td>
+<td style="text-align:left;">
+2005-2009
+</td>
+<td style="text-align:left;">
+Field boundary
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+58.595272
+</td>
+<td style="text-align:left;">
+25.013607
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Livestock; Cropped fields (arable)
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Field edge
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Estonia; Vaike-Maarja, Are, Vihtra, Virratsi, Abja-Paluoja and Ilmatsalu; Observational; Not stated
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641375
+</td>
+<td style="text-align:left;">
+Aavik (2010)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Quantifying+the+effect+of+organic+farming,+field+boundary+type+and+landscape+structure+on+the+vegeta&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Quantifying the effect of organic farming, field boundary type and landscape structure on the vegetation of field boundaries</a>
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+2010-2014
+</td>
+<td style="text-align:left;">
+Field boundary
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+<td style="text-align:left;">
+58.405713
+</td>
+<td style="text-align:left;">
+26.801576
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Other (please specify); Mixed conventional and organic, multiple farms (not described)
+</td>
+<td style="text-align:left;">
+Conventional; Organic
+</td>
+<td style="text-align:left;">
+Q2; Q3
+</td>
+<td style="text-align:left;">
+Regional scale
+</td>
+<td style="text-align:left;">
+Field edge
+</td>
+<td style="text-align:left;">
+Not described; regional study with limited details on single vegetated strips
+</td>
+<td style="text-align:left;">
+Estonia; Tartu County; Observational; &lt;1
+</td>
+<td style="text-align:left;">
+Observational
+</td>
+<td style="text-align:left;">
+Hedgerow; Other (please specify); road boundaris; grassland-adjacent boundaries; ditch verges; ditch verges with trees and bushes; woody boundaries, forest edges, tree lines and hedgerows; road verges with trees and shrubs
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641382
+</td>
+<td style="text-align:left;">
+Abu-Zreig (2004)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Experimental+investigation+of+runoff+reduction+and+sediment+removal+by+vegetated+filter+strips&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Experimental investigation of runoff reduction and sediment removal by vegetated filter strips</a>
+</td>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:left;">
+2000-2004
+</td>
+<td style="text-align:left;">
+Vegetated filter strip
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+not stated
+</td>
+<td style="text-align:left;">
+not stated
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Plot scale
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not stated; Not stated; Manipulative; &lt;1
+</td>
+<td style="text-align:left;">
+Manipulative
+</td>
+<td style="text-align:left;">
+Grasses; Perennial rye grass; Other (please specify); Creeping red fescue, birdsfoot trefoil, native riparian vegetation (wild oat, quack, fescue, dandelions, etc.)
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20641384
+</td>
+<td style="text-align:left;">
+Abu-Zreig (2003)
+</td>
+<td style="text-align:left;">
+<a href="http://scholar.google.co.uk/scholar?q=Phosphorus+removal+in+vegetated+filter+strips&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C5">Phosphorus removal in vegetated filter strips</a>
+</td>
+<td style="text-align:right;">
+2003
+</td>
+<td style="text-align:left;">
+2000-2004
+</td>
+<td style="text-align:left;">
+Vegetated filter strip
+</td>
+<td style="text-align:left;">
+Canada
+</td>
+<td style="text-align:left;">
+43.683715
+</td>
+<td style="text-align:left;">
+-80.430543
+</td>
+<td style="text-align:left;">
+Not stated
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Plot scale
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Not described
+</td>
+<td style="text-align:left;">
+Ontario, Canada; Elora, Ontario; Manipulative; &lt;1
+</td>
+<td style="text-align:left;">
+Manipulative
+</td>
+<td style="text-align:left;">
+Grasses; Other (please specify); Perennial ryegrass, legume and creeping red fescue, native grass species
+</td>
+</tr>
+</tbody>
+</table>
 </div>
   </div>
 
@@ -160,7 +1165,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
