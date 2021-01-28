@@ -25,6 +25,7 @@ library(tidyverse)
 library(kableExtra)
 library(janitor)
 
+# this avoids tidyverse conflicts with the base function filter
 conflicted::conflict_prefer("filter", "dplyr")
 ```
 
@@ -183,7 +184,7 @@ condensed_buffer_example %>%
   # useful function for customising table formatting
   kable_styling(
     bootstrap_options = "striped", 
-    font_size = 6)
+    font_size = 9)
 
 ```
 
@@ -200,7 +201,7 @@ buffer_example %>%
 study_descriptions %>% 
   kable() %>% 
   kable_styling("striped",
-                font_size = 6)
+                font_size = 9)
 
 
 ```
@@ -212,6 +213,6 @@ full_join(study_descriptions, condensed_buffer_example,
           by = "short_title") %>% 
   kable() %>% 
    kable_styling("striped",
-                font_size = 6)
+                font_size = 9)
 
 ```
