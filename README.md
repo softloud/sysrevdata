@@ -4,30 +4,25 @@
 # sysrevdata
 
 <!-- badges: start -->
-
-[![Travis build
-status](https://travis-ci.com/softloud/sysrevdata.svg?branch=master)](https://travis-ci.com/softloud/sysrevdata)
+<!-- [![Travis build status](https://travis-ci.com/softloud/sysrevdata.svg?branch=master)](https://travis-ci.com/softloud/sysrevdata) -->
 <!-- badges: end -->
 
-The goal of sysrevdata is to provide examples and extensible tools for
-structuring data for systematic review.
+The goal of sysrevdata is to provide examples and extensible toolchains
+for structuring data for systematic review.
 
 See vignettes for example toolchain walkthroughs.
 
 ## Vignettes
 
-  - [data
-    structures](https://softloud.github.io/sysrevdata/articles/data-structures.html)
-    What data do I want? What data do I have?
-  - [narrative](https://softloud.github.io/sysrevdata/articles/narrative.html)
-    Condensed summaries of data for human interpretation
-  - [analytical](https://softloud.github.io/sysrevdata/articles/analytical.html)
+-   Narrative synthesis table \| Condensed summaries of data for human
+    interpretation
+-   Long-form data for complex visualisations and analyses \|
     Structuring data for machine interpretation
 
-## Example datasets
+## Example dataset
 
-This package currently contains two example datasets from published open
-systematic reviews.
+This package currently contains `bufferstrips` dataset from a published
+systematic review.
 
 ``` r
 library(sysrevdata)
@@ -75,8 +70,7 @@ hazard %>%
 
 See
 
-  - `?bufferstrips`
-  - `?hazard`
+-   `?bufferstrips`
 
 for more details.
 
@@ -86,11 +80,8 @@ You can install
 <!-- the released version of sysrevdata from [CRAN](https://CRAN.R-project.org) with: -->
 
 <!-- ``` r -->
-
 <!-- install.packages("sysrevdata") -->
-
 <!-- ``` -->
-
 <!-- And  -->
 
 the development version from [GitHub](https://github.com/) with:

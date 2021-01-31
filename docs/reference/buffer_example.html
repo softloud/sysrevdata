@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Replace text string across database — replace_string • sysrevdata</title>
+<title>Example bufferstrips — buffer_example • sysrevdata</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Replace text string across database — replace_string" />
-<meta property="og:description" content="Replace a given string." />
+<meta property="og:title" content="Example bufferstrips — buffer_example" />
+<meta property="og:description" content="This is a subset of the bufferstrips datatset used in the walkthroughs." />
 
 
 
@@ -118,41 +118,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Replace text string across database</h1>
+    <h1>Example bufferstrips</h1>
     
-    <div class="hidden name"><code>replace_string.Rd</code></div>
+    <div class="hidden name"><code>buffer_example.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Replace a given string.</p>
+    <p>This is a subset of the <a href='bufferstrips.html'>bufferstrips</a> datatset used in the walkthroughs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>replace_string</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>replace</span>, <span class='va'>with</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='va'>buffer_example</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>data</th>
-      <td><p>A dataframe containing rows of systematic review data.</p></td>
-    </tr>
-    <tr>
-      <th>replace</th>
-      <td><p>A string to be replaced across the dataframe.</p></td>
-    </tr>
-    <tr>
-      <th>with</th>
-      <td><p>A string used to replace the above string.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A dataframe with the string replaced.</p>
+    <p>An object of class <code>tbl_df</code> (inherits from <code>tbl</code>, <code>data.frame</code>) with 5 rows and 84 columns.</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>replace_string</span><span class='op'>(</span><span class='va'>data</span>, replace <span class='op'>=</span> <span class='st'>'NULL'</span>, with <span class='op'>=</span> <span class='st'>''</span><span class='op'>)</span>;
-</div><div class='output co'>#&gt; <span class='error'>Error in replace_string(data, replace = "NULL", with = ""): could not find function "replace_string"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

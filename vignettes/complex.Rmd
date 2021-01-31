@@ -1,0 +1,143 @@
+---
+title: "complex"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{complex}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE}
+# packages used in this walkthrough
+library(sysrevdata)
+library(tidyverse)
+
+# this avoids tidyverse conflicts with the base function filter
+conflicted::conflict_prefer("filter", "dplyr")
+```
+
+## complex visualisations and analysis
+
+In addition to a narrative synthesis table, systematic reviews require complex visualisations, such as systematics maps, and summaries of particular components, such as the number of countries considered in a study. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
+
+This is the ideal way to share data for future syntheses, as it is machine readable for multiple analyses.
+
+In this walkthrough, we'll consider the `bufferstrips` dataset, which is wide-formatted by subcategory. 
+
+```{r}
+# spatial variables
+buffer_example %>% 
+  select(short_title, contains("spatial"))
+```
+
+
+## wide to long
+
+We wish to convert these wide data to long-form data, dropping the `NA` elements and producing a table wherein each row represents the subcategory for one category for each study.
+
+We'll use the collection of variables we obtained in the [creating a narrative synthesis table vignette](narrative.html). 
+
+```{r}
+buffer_variables
+```
+
+Here's one way of transforming the data to long format. 
+
+```{r}
+buffer_example_long <-
+  buffer_example %>%
+  # this function pivots longer
+  pivot_longer(
+    # see the narrative vignette for how this vector was created
+    cols = contains(buffer_variables),
+    # name of column we will put the column names of the wide data
+    names_to = "category",
+    # name of column we will put the values of those columns in
+    values_to = "subcategory",
+    # drop the NA values
+    values_drop_na = TRUE
+  ) %>%
+  mutate(category = if_else(
+    # extract the prefix of the column names with _
+    str_detect(category, "_"),
+    str_extract(category, "[a-z]*"),
+    category
+  ))
+
+# newly created columns
+buffer_example_long %>%
+  select(short_title, category, subcategory)
+
+```
+
+```{r eval=FALSE, include=FALSE}
+usethis::use_data(buffer_example_long, overwrite=TRUE)
+```
+
+
+## condensed to long
+
+Suppose, however, that we began with condensed data, as we created in the [creating a narrative synthesis table vignette](narrative.html). 
+
+```{r}
+condensed_buffer_example
+```
+
+We want to take these data and create the same long-format we have above.
+
+```{r message=FALSE, warning=FALSE}
+condensed_buffer_example %>% 
+  pivot_longer(
+    contains(buffer_variables),
+    names_to = "category",
+    values_to = "subcategory"
+  ) %>% 
+  separate(subcategory,
+           # there are a maximum of 8 different subcategories
+           into = letters[1:8],
+           sep = "; ") %>% 
+  pivot_longer(letters[1:8],
+               values_to = "subcategory") %>%
+  # get rid of nas
+  filter(!is.na(subcategory)) %>%
+  # drop redundant column
+  select(-name) %>% 
+  # from here is just for display
+  select(short_title, category, subcategory)
+
+
+```
+
+## summarising
+
+Now we have our data in long-form, we can perform various analyses.
+
+We might be interested in the number of countries in the systematic review, in which case we can use the original data.
+
+```{r}
+bufferstrips %>% 
+  count(study_country)
+```
+
+But to see the number of, say, observations in the farming production system, we will use our long data.
+
+```{r}
+buffer_example_long %>%
+  filter(category == "farmingproductionsystem") %>%
+  count(subcategory)
+  
+  
+```
+
+
+
+

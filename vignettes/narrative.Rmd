@@ -43,9 +43,7 @@ As the number of studies increase, and the number of variables considered multip
 
 Here we consider ways we can condense and format data for presentation for humans to read, as opposed to machine-readable data for analysis and complex visualisation.
 
-We may begin with sparsely-filled wide data or long-format machine-structured data, neither of which are good for publication or interpretation by human readers. So, we will consider how to condense these structures in turn, before demonstrating how to format the output.
-
-> todo later link to other vignette
+We may begin with sparsely-filled wide data or [long-format machine-structured data](complex.html), neither of which are good for publication or interpretation by human readers. So, we will consider how to condense these structures in turn, before demonstrating how to format the output.
 
 ## condensing from wide data
 
@@ -57,6 +55,10 @@ buffer_example <-
   head(5)
 ```
 
+```{r include=FALSE, eval=FALSE}
+usethis::use_data(buffer_example)
+```
+
 
 To see how these data are sparse and wide, we will extract the abbreviated title, year, and the columns that contain observations relating to spatial scale. 
 
@@ -64,9 +66,6 @@ To see how these data are sparse and wide, we will extract the abbreviated title
 buffer_example %>% 
   select(short_title, contains("spatial"))
 ```
-
-
-> solve encoding problems in title/author fields
 
 When we format these data (which we'll provide toolchains for at the end), the wideness becomes an issue. And this is with only the spatial variables (columns) selected. The table is unwieldy, large, and filled with white space. 
 
@@ -109,12 +108,12 @@ Our first task is to identify the columns that have common prefixes, that is, co
 
 ```{r}
 (
-  variables_to_condense <-
+  buffer_variables <-
     # extract the prefix of each column
     # i.e., the string before the first _
     buffer_example %>%
     # we can exclude the column names that don't contain _
-    select(contains("_")) %>%
+    select(contains("_"), -study_country, -study_location) %>%
     # get column names
     names() %>%
     # extract the word before the first _
@@ -131,6 +130,11 @@ Our first task is to identify the columns that have common prefixes, that is, co
 )
 
 ```
+
+```{r include=FALSE, eval=FALSE}
+usethis::use_data(buffer_variables, overwrite = TRUE)
+```
+
 
 Now we adapt the code we used to condense the variables to a function.
 
@@ -158,44 +162,32 @@ condense_variable("spatialscale")
 Next we apply our function to every variable we wish to condense and combine the results into a new table of condensed variables.
 
 ```{r message=FALSE}
-(
+
 condensed_buffer_example <-
-variables_to_condense %>%
+buffer_variables %>%
   # apply the function to each variable we wish to condense, producing a list of dataframes
   map(condense_variable) %>% 
   # bind the columns together, with the short title as the first column
   bind_cols(
-    buffer_example %>% select(short_title), .
+    buffer_example %>% select(-contains(buffer_variables)), .
   )
-)
+
+# just showing the condensed variables
+condensed_buffer_example %>% 
+  select(short_title, contains(buffer_variables))
 
 ```
+
+```{r include=FALSE, eval=FALSE}
+usethis::use_data(condensed_buffer_example, overwrite=TRUE)
+```
+
 
 ## condensing from long data
 
 Suppose we start with long-format data, in a tidy format, where each row is a category and subcategory observation for a specific study. In the interests of space, we'll show the title, category, and subcategory, the columns that don't require condensing remain the same. 
 
-```{r include=FALSE}
-
-buffer_example_long <- 
-buffer_example %>% 
-  pivot_longer(
-    cols = contains(variables_to_condense),
-    names_to = "category",
-    values_to = "subcategory",
-    values_drop_na = TRUE
-  ) %>% 
-  mutate(category = if_else(
-    str_detect(category, "_"),
-    str_extract(category, "[a-z]*"),
-    category)) 
-
-buffer_example_long %>% 
-  select(short_title, category, subcategory) %>% View()
-
-```
-
-For this section, we'll pretend the `bufferstrips` dataset is long, using this dataframe.
+For this section, we'll pretend the `bufferstrips` dataset is long, using this dataframe, created in the [vignette](complex.html) on creating long-form datasets.
 
 ```{r}
 buffer_example_long %>% 
@@ -249,7 +241,7 @@ study_descriptions <-
 buffer_example %>% 
   # combine the google scholar link in a way that will be rendered as a clickable link 
   mutate(title = str_c("[", title, "](",google_scholar_link,")")) %>% 
-  select(-contains(variables_to_condense),
+  select(-contains(buffer_variables),
          -google_scholar_link) 
 
 study_descriptions %>% 
