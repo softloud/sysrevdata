@@ -173,7 +173,61 @@ variables_to_condense %>%
 
 ## condensing from long data
 
-> todolater show toolchain of getting from long to condensed
+Suppose we start with long-format data, in a tidy format, where each row is a category and subcategory observation for a specific study. In the interests of space, we'll show the title, category, and subcategory, the columns that don't require condensing remain the same. 
+
+```{r include=FALSE}
+
+buffer_example_long <- 
+buffer_example %>% 
+  pivot_longer(
+    cols = contains(variables_to_condense),
+    names_to = "category",
+    values_to = "subcategory",
+    values_drop_na = TRUE
+  ) %>% 
+  mutate(category = if_else(
+    str_detect(category, "_"),
+    str_extract(category, "[a-z]*"),
+    category)) 
+
+buffer_example_long %>% 
+  select(short_title, category, subcategory) %>% View()
+
+```
+
+For this section, we'll pretend the `bufferstrips` dataset is long, using this dataframe.
+
+```{r}
+buffer_example_long %>% 
+  # in the interests of space, we'll just show the relevant columns
+  select(short_title, category, subcategory)
+
+
+```
+
+
+Now we'll pivot wide so we can condense. 
+
+```{r}
+# this function creates a string from the vector of multiple values
+# NB: it's entirely possible there's a way to do this using pivot_wider, but I haven't found it
+mash_subcategories <- function(x) {
+  paste0(x, collapse = "; ")
+}
+
+# go from long to wide
+buffer_example_long %>% 
+  pivot_wider(
+    names_from = category,
+    values_from = subcategory,
+    values_fn = mash_subcategories
+  ) %>% 
+  # we'll just show a few examples because space
+  select(short_title, vegetated_strip_description, farmingproductionsystem)
+
+```
+
+Now we have the long data in the same condensed format as the wide data in the section above, and we are ready to consider formatting functions for publication.
 
 ## formatting for output
 
@@ -216,3 +270,4 @@ full_join(study_descriptions, condensed_buffer_example,
                 font_size = 9)
 
 ```
+

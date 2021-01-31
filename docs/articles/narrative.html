@@ -96,6 +96,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
 
+<span class="co"># this avoids tidyverse conflicts with the base function filter</span>
 <span class="fu">conflicted</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/conflicted/man/conflict_prefer.html">conflict_prefer</a></span><span class="op">(</span><span class="st">"filter"</span>, <span class="st">"dplyr"</span><span class="op">)</span></code></pre></div>
 <div id="creating-a-narrative-synthesis-table" class="section level2">
 <h2 class="hasAnchor">
@@ -362,21 +363,64 @@ Plot scale
 <div id="condensing-from-long-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#condensing-from-long-data" class="anchor"></a>condensing from long data</h2>
-<blockquote>
-<p>todolater show toolchain of getting from long to condensed</p>
-</blockquote>
+<p>Suppose we start with long-format data, in a tidy format, where each row is a category and subcategory observation for a specific study. In the interests of space, we’ll show the title, category, and subcategory, the columns that don’t require condensing remain the same.</p>
+<p>For this section, we’ll pretend the <code>bufferstrips</code> dataset is long, using this dataframe.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">buffer_example_long</span> <span class="op">%&gt;%</span> 
+  <span class="co"># in the interests of space, we'll just show the relevant columns</span>
+  <span class="fu">select</span><span class="op">(</span><span class="va">short_title</span>, <span class="va">category</span>, <span class="va">subcategory</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 69 x 3</span>
+<span class="co">#&gt;    short_title  category         subcategory                                    </span>
+<span class="co">#&gt;    &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;                                          </span>
+<span class="co">#&gt;  1 Aaron (2005) farmingproducti… Not described                                  </span>
+<span class="co">#&gt;  2 Aaron (2005) farmingsystem    Not described                                  </span>
+<span class="co">#&gt;  3 Aaron (2005) measurementquar… Q1                                             </span>
+<span class="co">#&gt;  4 Aaron (2005) measurementquar… Q2                                             </span>
+<span class="co">#&gt;  5 Aaron (2005) spatialscale     Catchment scale                                </span>
+<span class="co">#&gt;  6 Aaron (2005) spatialscale     Regional scale                                 </span>
+<span class="co">#&gt;  7 Aaron (2005) striplocation    Riparian                                       </span>
+<span class="co">#&gt;  8 Aaron (2005) stripmanagement  Not described                                  </span>
+<span class="co">#&gt;  9 Aaron (2005) study            Maryland, USA                                  </span>
+<span class="co">#&gt; 10 Aaron (2005) study            Cattail Creek, Hawling's River, Northwest Bran…</span>
+<span class="co">#&gt; # … with 59 more rows</span></code></pre></div>
+<p>Now we’ll pivot wide so we can condense.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># this function creates a string from the vector of multiple values</span>
+<span class="co"># NB: it's entirely possible there's a way to do this using pivot_wider, but I haven't found it</span>
+<span class="va">mash_subcategories</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"; "</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># go from long to wide</span>
+<span class="va">buffer_example_long</span> <span class="op">%&gt;%</span> 
+  <span class="fu">pivot_wider</span><span class="op">(</span>
+    names_from <span class="op">=</span> <span class="va">category</span>,
+    values_from <span class="op">=</span> <span class="va">subcategory</span>,
+    values_fn <span class="op">=</span> <span class="va">mash_subcategories</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="co"># we'll just show a few examples </span>
+  <span class="fu">select</span><span class="op">(</span><span class="va">short_title</span>, <span class="va">vegetated_strip_description</span>, <span class="va">farmingproductionsystem</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 5 x 3</span>
+<span class="co">#&gt;   short_title    vegetated_strip_des… farmingproductionsystem                   </span>
+<span class="co">#&gt;   &lt;chr&gt;          &lt;chr&gt;                &lt;chr&gt;                                     </span>
+<span class="co">#&gt; 1 Aaron (2005)   Riparian buffer      Not described                             </span>
+<span class="co">#&gt; 2 Aavik (2008)   Field boundary       Livestock; Cropped fields (arable)        </span>
+<span class="co">#&gt; 3 Aavik (2010)   Field boundary       Other (please specify); Mixed conventiona…</span>
+<span class="co">#&gt; 4 Abu-Zreig (20… Vegetated filter st… Not described                             </span>
+<span class="co">#&gt; 5 Abu-Zreig (20… Vegetated filter st… Not described</span></code></pre></div>
+<p>Now we have the long data in the same condensed format as the wide data in the section above, and we are ready to consider formatting functions for publication.</p>
 </div>
 <div id="formatting-for-output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#formatting-for-output" class="anchor"></a>formatting for output</h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">condensed_buffer_example</span> <span class="op">%&gt;%</span> 
   <span class="co"># converts dataframe to an html output table</span>
   <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># useful function for customising table formatting</span>
   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>
     bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>, 
-    font_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+    font_size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped">
 <thead><tr>
 <th style="text-align:left;">
@@ -574,7 +618,7 @@ Grasses; Other (please specify); Perennial ryegrass, legume and creeping red fes
 </tbody>
 </table>
 <p>We can present this with a separate table of metadata, using the short title as the reference. We’ll combine the googlescholar link with the title.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study_descriptions</span> <span class="op">&lt;-</span>
 <span class="va">buffer_example</span> <span class="op">%&gt;%</span> 
   <span class="co"># combine the google scholar link in a way that will be rendered as a clickable link </span>
@@ -585,7 +629,7 @@ Grasses; Other (please specify); Perennial ryegrass, legume and creeping red fes
 <span class="va">study_descriptions</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="st">"striped"</span>,
-                font_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+                font_size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped">
 <thead><tr>
 <th style="text-align:right;">
@@ -783,12 +827,12 @@ Not stated
 </tbody>
 </table>
 <p>And, if we are happy to have a wider table, we can combine both tables together to form one narrative synthesis table with all variables condensed. Although wide, it is not as wide or sparse as where we started, and is much easier to read.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">full_join</span><span class="op">(</span><span class="va">study_descriptions</span>, <span class="va">condensed_buffer_example</span>,
           by <span class="op">=</span> <span class="st">"short_title"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="st">"striped"</span>,
-                font_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+                font_size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped">
 <thead><tr>
 <th style="text-align:right;">
