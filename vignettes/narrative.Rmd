@@ -189,7 +189,7 @@ condensed_buffer_example %>%
 usethis::use_data(condensed_buffer_example, overwrite=TRUE)
 ```
 
-The output is a condensed datatable suitable for inclusion in a manuscript, with a minimum number of columns, no unnecessary white space, designed specifically to be easily digestible by the reader. In the interests of <u class="dotted">`r tippy("Open Data", "'<em>Open data'</em> is the concept that research findings should be freely available to everyone to use as they wish, without restriction or control: Auer, S. R.; Bizer, C.; Kobilarov, G.; Lehmann, J.; Cyganiak, R.; Ives, Z. 2007. DBpedia: A Nucleus for a Web of Open Data. The Semantic Web. Lecture Notes in Computer Science. 4825: 722. https://doi.org/10.1007/978-3-540-76298-0_52.")`</u>, review authors should also make the underlying data freely accessible in a widely usable and easily understandable format, not solely in text form.
+The output is a condensed datatable suitable for inclusion in a manuscript, with a minimum number of columns, no unnecessary white space, designed specifically to be easily digestible by the reader. In the interests of <u class="dotted">`r tippy("Open Data", "'<em>Open data'</em> is the concept that research findings should be freely available to everyone to use as they wish, without restriction or control: Auer, S. R.; Bizer, C.; Kobilarov, G.; Lehmann, J.; Cyganiak, R.; Ives, Z. 2007. 'DBpedia: A Nucleus for a Web of Open Data'. The Semantic Web. Lecture Notes in Computer Science. 4825: 722. https://doi.org/10.1007/978-3-540-76298-0_52.")`</u>, review authors should also make the underlying data freely accessible in a widely usable and easily understandable format, not solely in text form.
 
 
 ## condensing from long data
