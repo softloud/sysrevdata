@@ -44,11 +44,6 @@ bufferstrips %>%
   dplyr::select(1:5) %>% 
   # select first 10 rows
   head(10)
-  
-hazard %>%
-  dplyr::select(1:5) %>% 
-  head(10)
-
 
 ```
 
