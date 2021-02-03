@@ -8,7 +8,12 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+<style>
+u.dotted{
+  border-bottom: 1px dashed #999;
+  text-decoration: none; 
+}
+</style>
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -20,6 +25,7 @@ knitr::opts_chunk$set(
 # packages used in this walkthrough
 library(sysrevdata)
 library(tidyverse)
+library(tippy)
 
 # this avoids tidyverse conflicts with the base function filter
 conflicted::conflict_prefer("filter", "dplyr")
@@ -27,7 +33,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 
 ## complex visualisations and analysis
 
-In addition to a narrative synthesis table, systematic reviews require complex visualisations, such as systematics maps, and summaries of particular components, such as the number of countries considered in a study. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
+In addition to a narrative synthesis, systematic reviews and maps typically require complex visualisations, such as evidence atlases. In addition, it is common for review authors to upgrade a systematic map into one or more focused systematic reviews, which may involve <u class="dotted">`r tippy("quantitative synthesis", "<span style='font-size:20px;'>e.g. meta-analysis or meta-regression</span>")`</u>. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
 
 This is the ideal way to share data for future syntheses, as it is machine readable for multiple analyses.
 
