@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -72,7 +72,8 @@
 
       
 
-      </header><script src="complex_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><link href="complex_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="complex_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>complex</h1>
@@ -103,14 +104,14 @@
 <span class="va">buffer_example</span> <span class="op">%&gt;%</span> 
   <span class="fu">select</span><span class="op">(</span><span class="va">short_title</span>, <span class="fu">contains</span><span class="op">(</span><span class="st">"spatial"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 5 x 7</span>
-<span class="co">#&gt;   short_title spatialscale_pl… spatialscale_fi… spatialscale_fa…</span>
+<span class="co">#&gt;   short_title spatialscale_pl~ spatialscale_fi~ spatialscale_fa~</span>
 <span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 Aaron (200… &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
-<span class="co">#&gt; 2 Aavik (200… &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
-<span class="co">#&gt; 3 Aavik (201… &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
-<span class="co">#&gt; 4 Abu-Zreig … Plot scale       &lt;NA&gt;             &lt;NA&gt;            </span>
-<span class="co">#&gt; 5 Abu-Zreig … Plot scale       &lt;NA&gt;             &lt;NA&gt;            </span>
-<span class="co">#&gt; # … with 3 more variables: spatialscale_catchment &lt;chr&gt;,</span>
+<span class="co">#&gt; 1 Aaron (200~ &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 2 Aavik (200~ &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 3 Aavik (201~ &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 4 Abu-Zreig ~ Plot scale       &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; 5 Abu-Zreig ~ Plot scale       &lt;NA&gt;             &lt;NA&gt;            </span>
+<span class="co">#&gt; # ... with 3 more variables: spatialscale_catchment &lt;chr&gt;,</span>
 <span class="co">#&gt; #   spatialscale_regional &lt;chr&gt;, spatialscale_notdescribed &lt;chr&gt;</span></code></pre></div>
 </div>
 <div id="wide-to-long" class="section level2">
@@ -162,7 +163,7 @@
 <span class="co">#&gt;  8 Aaron (2005) stripmanagement         Not described  </span>
 <span class="co">#&gt;  9 Aaron (2005) studydesign             Observational  </span>
 <span class="co">#&gt; 10 Aaron (2005) vegetationtype          Not described  </span>
-<span class="co">#&gt; # … with 44 more rows</span></code></pre></div>
+<span class="co">#&gt; # ... with 44 more rows</span></code></pre></div>
 </div>
 <div id="condensed-to-long" class="section level2">
 <h2 class="hasAnchor">
@@ -171,14 +172,14 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">condensed_buffer_example</span>
 <span class="co">#&gt; # A tibble: 5 x 22</span>
-<span class="co">#&gt;   item_id short_title title  year period google_scholar_… vegetated_strip…</span>
+<span class="co">#&gt;   item_id short_title title  year period google_scholar_~ vegetated_strip~</span>
 <span class="co">#&gt;     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1  2.06e7 Aaron (200… Inve…  2005 2005-… http://scholar.… Riparian buffer </span>
-<span class="co">#&gt; 2  2.06e7 Aavik (200… What…  2008 2005-… http://scholar.… Field boundary  </span>
-<span class="co">#&gt; 3  2.06e7 Aavik (201… Quan…  2010 2010-… http://scholar.… Field boundary  </span>
-<span class="co">#&gt; 4  2.06e7 Abu-Zreig … Expe…  2004 2000-… http://scholar.… Vegetated filte…</span>
-<span class="co">#&gt; 5  2.06e7 Abu-Zreig … Phos…  2003 2000-… http://scholar.… Vegetated filte…</span>
-<span class="co">#&gt; # … with 15 more variables: nation &lt;chr&gt;, study_country &lt;chr&gt;,</span>
+<span class="co">#&gt; 1  2.06e7 Aaron (200~ Inve~  2005 2005-~ http://scholar.~ Riparian buffer </span>
+<span class="co">#&gt; 2  2.06e7 Aavik (200~ What~  2008 2005-~ http://scholar.~ Field boundary  </span>
+<span class="co">#&gt; 3  2.06e7 Aavik (201~ Quan~  2010 2010-~ http://scholar.~ Field boundary  </span>
+<span class="co">#&gt; 4  2.06e7 Abu-Zreig ~ Expe~  2004 2000-~ http://scholar.~ Vegetated filte~</span>
+<span class="co">#&gt; 5  2.06e7 Abu-Zreig ~ Phos~  2003 2000-~ http://scholar.~ Vegetated filte~</span>
+<span class="co">#&gt; # ... with 15 more variables: nation &lt;chr&gt;, study_country &lt;chr&gt;,</span>
 <span class="co">#&gt; #   study_location &lt;chr&gt;, latitute &lt;chr&gt;, longitude &lt;chr&gt;, `Study length</span>
 <span class="co">#&gt; #   (years)` &lt;chr&gt;, `Time since intervention (years)` &lt;chr&gt;,</span>
 <span class="co">#&gt; #   farmingproductionsystem &lt;chr&gt;, farmingsystem &lt;chr&gt;,</span>
@@ -217,7 +218,7 @@
 <span class="co">#&gt;  8 Aaron (2005) stripmanagement         Not described  </span>
 <span class="co">#&gt;  9 Aaron (2005) studydesign             Observational  </span>
 <span class="co">#&gt; 10 Aaron (2005) vegetationtype          Not described  </span>
-<span class="co">#&gt; # … with 49 more rows</span></code></pre></div>
+<span class="co">#&gt; # ... with 49 more rows</span></code></pre></div>
 </div>
 <div id="summarising" class="section level2">
 <h2 class="hasAnchor">
@@ -229,7 +230,7 @@
   <span class="fu">count</span><span class="op">(</span><span class="va">study_country</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 112 x 2</span>
 <span class="co">#&gt;    study_country                               n</span>
-<span class="co">#&gt;  * &lt;chr&gt;                                   &lt;int&gt;</span>
+<span class="co">#&gt;    &lt;chr&gt;                                   &lt;int&gt;</span>
 <span class="co">#&gt;  1 Alberta, Canada                             1</span>
 <span class="co">#&gt;  2 Argentina                                   5</span>
 <span class="co">#&gt;  3 Arkansas, Kentucky and Mississippi, USA     1</span>
@@ -240,7 +241,7 @@
 <span class="co">#&gt;  8 California, USA                             6</span>
 <span class="co">#&gt;  9 Central and eastern USA                     1</span>
 <span class="co">#&gt; 10 Central district, Russia                    1</span>
-<span class="co">#&gt; # … with 102 more rows</span></code></pre></div>
+<span class="co">#&gt; # ... with 102 more rows</span></code></pre></div>
 <p>But to see the number of, say, observations in the farming production system, we will use our long data.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">buffer_example_long</span> <span class="op">%&gt;%</span>
@@ -248,7 +249,7 @@
   <span class="fu">count</span><span class="op">(</span><span class="va">subcategory</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 5 x 2</span>
 <span class="co">#&gt;   subcategory                                                        n</span>
-<span class="co">#&gt; * &lt;chr&gt;                                                          &lt;int&gt;</span>
+<span class="co">#&gt;   &lt;chr&gt;                                                          &lt;int&gt;</span>
 <span class="co">#&gt; 1 Cropped fields (arable)                                            1</span>
 <span class="co">#&gt; 2 Livestock                                                          1</span>
 <span class="co">#&gt; 3 Mixed conventional and organic, multiple farms (not described)     1</span>
