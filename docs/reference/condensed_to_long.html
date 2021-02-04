@@ -81,7 +81,7 @@ of a given value separator within a given set of columns." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +96,7 @@ of a given value separator within a given set of columns." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/complex.html">complex</a>
+      <a href="../articles/Machine_readable.html">Machine readable</a>
     </li>
     <li>
       <a href="../articles/narrative.html">narrative</a>
@@ -159,21 +159,8 @@ default is set to ';'.</p></td>
 <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span><span class='op'>(</span><span class='va'>fpath</span><span class='op'>)</span>
 <span class='va'>columns</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'region'</span>, <span class='st'>'hazard'</span>, <span class='st'>'response'</span>, <span class='st'>'sdgs'</span>, <span class='st'>'actor'</span><span class='op'>)</span>
 <span class='va'>long_data</span> <span class='op'>&lt;-</span> <span class='fu'>condensed_to_long</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>columns</span>, value_sep <span class='op'>=</span> <span class='st'>'xxx'</span><span class='op'>)</span>
-<span class='va'>long_data</span>;
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 146,362 x 8</span><span>
-#&gt;    article_id region title           authors    hazard response   sdgs   actor  
-#&gt;         </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Technolog… Food … Indivi…
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Technolog… Food … Local …
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Technolog… Pover… Indivi…
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Technolog… Pover… Local …
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Behaviour… Food … Indivi…
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Behaviour… Food … Local …
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Behaviour… Pover… Indivi…
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Behaviour… Pover… Local …
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Ecosystem… Food … Indivi…
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>    6</span><span style='text-decoration: underline;'>205</span><span>478 Africa The response t… Nti, F.K.… Droug… Ecosystem… Food … Local …
-#&gt; </span><span style='color: #949494;'># … with 146,352 more rows</span><span></div></span></pre>
+</div><div class='output co'>#&gt; <span class='error'>Error in nchar(u, itype): 'nchar()' requires a character vector</span></div><div class='input'><span class='va'>long_data</span>;
+</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'long_data' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

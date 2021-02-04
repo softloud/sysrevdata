@@ -201,7 +201,7 @@ For this section, we'll use the long format of the `bufferstrips` dataset, using
 ```{r}
 buffer_example_long %>% 
   # in the interests of space, we'll just show the relevant columns
-  select(short_title, category_type, subcategory_value)
+  select(short_title, category, subcategory_value)
 
 
 ```
