@@ -5,7 +5,7 @@
 \alias{buffer_example_long}
 \title{Long-form example}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 54 rows and 16 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 54 rows and 17 columns.
 }
 \usage{
 buffer_example_long

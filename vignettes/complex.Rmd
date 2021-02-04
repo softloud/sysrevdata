@@ -66,22 +66,34 @@ buffer_example_long <-
     # see the narrative vignette for how this vector was created
     cols = contains(buffer_variables),
     # name of column we will put the column names of the wide data
-    names_to = "category",
+    names_to = "category_type",
     # name of column we will put the values of those columns in
-    values_to = "subcategory",
+    values_to = "subcategory_value",
     # drop the NA values
     values_drop_na = TRUE
   ) %>%
-  mutate(category = if_else(
+  # I suspect there's a tidy solution to this. However, finding a regex solution 
+  # was just as useful. There is a lot of string manipulation and extraction in 
+  # evisynth that is not pivoting. 
+  mutate(
+      subcategory_type = map_chr(
+    category_type,
+    .f = function(x){ifelse(
+    str_detect(x, "_"),
+    str_match(x, "_(\\w+)") %>% pluck(2),
+    NA
+  )}),
+    category_type = if_else(
     # extract the prefix of the column names with _
-    str_detect(category, "_"),
-    str_extract(category, "[a-z]*"),
-    category
-  ))
+    str_detect(category_type, "_"),
+    str_extract(category_type, "[a-z]*"),
+    category_type
+  )
+  )
 
 # newly created columns
 buffer_example_long %>%
-  select(short_title, category, subcategory)
+  select(short_title, category_type, subcategory_type, subcategory_value)
 
 ```
 
@@ -104,21 +116,21 @@ We want to take these data and create the same long-format we have above.
 condensed_buffer_example %>% 
   pivot_longer(
     contains(buffer_variables),
-    names_to = "category",
-    values_to = "subcategory"
+    names_to = "category_type",
+    values_to = "subcategory_value"
   ) %>% 
-  separate(subcategory,
+  separate(subcategory_value,
            # there are a maximum of 8 different subcategories
            into = letters[1:8],
            sep = "; ") %>% 
   pivot_longer(letters[1:8],
-               values_to = "subcategory") %>%
+               values_to = "subcategory_value") %>%
   # get rid of nas
-  filter(!is.na(subcategory)) %>%
+  filter(!is.na(subcategory_value)) %>%
   # drop redundant column
   select(-name) %>% 
   # from here is just for display
-  select(short_title, category, subcategory)
+  select(short_title, category_type, subcategory_value)
 
 
 ```
@@ -138,12 +150,25 @@ But to see the number of, say, observations in the farming production system, we
 
 ```{r}
 buffer_example_long %>%
-  filter(category == "farmingproductionsystem") %>%
-  count(subcategory)
+  filter(category_type == "farmingproductionsystem") %>%
+  count(subcategory_value)
   
   
 ```
 
+## back to wide
+
+```{r}
+back_to_wide <-
+  buffer_example_long %>% 
+  pivot_wider(
+    id_cols = -contains("category"),
+    names_from = c(category_type, subcategory_type),
+    names_sep = "_",
+    values_from = subcategory_value
+  ) 
+
+```
 
 
 

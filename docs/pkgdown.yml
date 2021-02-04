@@ -1,8 +1,8 @@
-pandoc: 2.7.2
+pandoc: 2.11.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   complex: complex.html
   narrative: narrative.html
-last_built: 2021-02-02T20:26Z
+last_built: 2021-02-04T14:43Z
 

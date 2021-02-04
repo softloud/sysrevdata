@@ -201,7 +201,7 @@ For this section, we'll use the long format of the `bufferstrips` dataset, using
 ```{r}
 buffer_example_long %>% 
   # in the interests of space, we'll just show the relevant columns
-  select(short_title, category, subcategory)
+  select(short_title, category_type, subcategory_value)
 
 
 ```
@@ -220,7 +220,7 @@ mash_subcategories <- function(x) {
 buffer_example_long %>% 
   pivot_wider(
     names_from = category,
-    values_from = subcategory,
+    values_from = subcategory_value,
     values_fn = mash_subcategories
   ) %>% 
   # we'll just show a few examples because space
