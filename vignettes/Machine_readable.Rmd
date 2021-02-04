@@ -1,10 +1,10 @@
 ---
-title: "complex"
+title: "Machine readable"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{complex}
+  %\VignetteIndexEntry{Machine readable}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,13 +19,14 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(tippy)
 ```
 
-```{r setup, message=FALSE}
+```{r setup, message=FALSE, warning=FALSE}
 # packages used in this walkthrough
 library(sysrevdata)
 library(tidyverse)
-library(tippy)
+library(leaflet)
 
 # this avoids tidyverse conflicts with the base function filter
 conflicted::conflict_prefer("filter", "dplyr")
@@ -33,13 +34,13 @@ conflicted::conflict_prefer("filter", "dplyr")
 
 ## complex visualisations and analysis
 
-In addition to a narrative synthesis, systematic reviews and maps typically require complex visualisations, such as evidence atlases. In addition, it is common for review authors to upgrade a systematic map into one or more focused systematic reviews, which may involve <u class="dotted">`r tippy("quantitative synthesis", "<span style='font-size:20px;'>e.g. meta-analysis or meta-regression</span>")`</u>. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
+In addition to a narrative synthesis, systematic reviews and maps typically require complex visualisations. In addition, it is common for review authors to upgrade a systematic map into one or more focused systematic reviews, which may involve <u class="dotted">`r tippy("quantitative synthesis", "<span style='font-size:20px;'>e.g. meta-analysis or meta-regression</span>")`</u>. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
 
 This is the ideal way to share data for future syntheses, as it is machine readable for multiple analyses.
 
 In this walkthrough, we'll consider the `bufferstrips` dataset, which is wide-formatted by subcategory. 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # spatial variables
 buffer_example %>% 
   select(short_title, contains("spatial"))
@@ -52,13 +53,13 @@ We wish to convert these wide data to long-form data, dropping the `NA` elements
 
 We'll use the collection of variables we obtained in the [creating a narrative synthesis table vignette](narrative.html). 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 buffer_variables
 ```
 
 Here's one way of transforming the data to long format. 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 buffer_example_long <-
   buffer_example %>%
   # this function pivots longer
@@ -106,7 +107,7 @@ usethis::use_data(buffer_example_long, overwrite=TRUE)
 
 Suppose, however, that we began with condensed data, as we created in the [creating a narrative synthesis table vignette](narrative.html). 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 condensed_buffer_example
 ```
 
@@ -141,14 +142,14 @@ Now we have our data in long-form, we can perform various analyses.
 
 We might be interested in the number of countries in the systematic review, in which case we can use the original data.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 bufferstrips %>% 
   count(study_country)
 ```
 
 But to see the number of, say, observations in the farming production system, we will use our long data.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 buffer_example_long %>%
   filter(category_type == "farmingproductionsystem") %>%
   count(subcategory_value)
@@ -156,9 +157,14 @@ buffer_example_long %>%
   
 ```
 
+## creating evidence maps
+
+For creating evidence maps we need the data in the wide-format with one row per study. Our  `bufferstrips` dataset is in the wide format already so lets try and reconfigure a wide database from the long formatted data that we created above.
+
+
 ## back to wide
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 back_to_wide <-
   buffer_example_long %>% 
   pivot_wider(
@@ -170,5 +176,18 @@ back_to_wide <-
 
 ```
 
+We can use a wide formatted dataset to plot a map of the study locations for example.
 
+```{r, message=FALSE, warning=FALSE}
+back_to_wide %>% 
+  select(short_title,latitute, longitude, google_scholar_link) %>% 
+  mutate(lat=as.numeric(latitute)) %>% 
+  mutate(lng=as.numeric(longitude)) %>% 
+  mutate(tag = paste0("Scholar_link: <a href=", google_scholar_link,">", google_scholar_link, "</a>")) %>% 
+  leaflet() %>% 
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=~lng, lat=~lat, popup=~tag)
+  
+  
+```
 
