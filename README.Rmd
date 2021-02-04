@@ -26,7 +26,7 @@ See vignettes for example toolchain walkthroughs.
 ## Vignettes
 
 - Narrative synthesis table | Condensed summaries of data for human interpretation
-- Long-form data for complex visualisations and analyses | Structuring data for machine interpretation
+- Machine readable data for complex visualisations and analyses | Structuring data for machine interpretation
 
 ## Example dataset
 
