@@ -50,7 +50,7 @@ buffer_example %>%
 
 ## wide to long
 
-We want to convert these wide data to long-form data, dropping the <u class="dotted">`r tippy("NA", "Not applicable, displayed when a cell is empty or blank")`</u> elements and producing a table where each row contains a unique <u class="dotted">`r tippy("level", "Also referred to as 'code' or 'subcategory''")`</u> of each <u class="dotted">`r tippy("factor", "Also referred to as 'variable' or 'category')`</u> for each study.
+We want to convert these wide data to long-form data, dropping the <u class="dotted">`r tippy("NA", "Not applicable, displayed when a cell is empty or blank")`</u> elements and producing a table where each row contains a unique <u class="dotted">`r tippy("level", "Also referred to as 'code' or 'subcategory''")`</u> of each <u class="dotted">`r tippy("factor", "Also referred to as 'variable' or 'category'")`</u> for each study.
 
 We'll use the collection of variables we obtained in the [creating a narrative synthesis table vignette](narrative.html). 
 
@@ -139,9 +139,9 @@ condensed_buffer_example %>%
 
 ## summarising
 
-Now we have our data in long-form, we can perform various analyses.
+Now we have our data in long-form, we can perform various analyses, including (if we wanted to) meta-analysis on extracted full quantitative data from each study.
 
-We might be interested in the number of countries in the systematic review, in which case we can use the original data.
+We might be interested in the number of countries in the systematic review, in which case we can use the original data where each row is a study (and studies are the independent data needed when we look at countries: each study was conducted in a specific country, so long data aren't necessary yet).
 
 ```{r, message=FALSE, warning=FALSE}
 bufferstrips %>% 
@@ -158,10 +158,9 @@ buffer_example_long %>%
   
 ```
 
-## creating evidence maps
+## creating evidence atlases
 
-For creating evidence maps we need the data in the wide-format with one row per study. Our  `bufferstrips` dataset is in the wide format already so lets try and reconfigure a wide database from the long formatted data that we created above.
-
+For creating <u class="dotted">`r tippy("evidence atlases", "Evidence atlases are interactive geographical representations of spatially explicit information, and a common visualisation for systematic maps")`</u> we need the data in the wide-format with one row per study. Our `bufferstrips` dataset is in the wide format already so lets try and reconfigure a wide database from the long formatted data that we created above.
 
 ## back to wide
 
@@ -177,7 +176,7 @@ back_to_wide <-
 
 ```
 
-We can use a wide formatted dataset to plot a map of the study locations for example.
+We can use a wide formatted dataset to plot a cartographic map of the study locations for example.
 
 ```{r, message=FALSE, warning=FALSE}
 back_to_wide %>% 
@@ -185,9 +184,9 @@ back_to_wide %>%
   mutate(lat=as.numeric(latitute)) %>% 
   mutate(lng=as.numeric(longitude)) %>% 
   mutate(tag = paste0("Scholar_link: <a href=", google_scholar_link,">", google_scholar_link, "</a>")) %>% 
-  leaflet() %>% 
+  leaflet(width = "100%") %>% 
   addTiles() %>%  # Add default OpenStreetMap map tiles
-  addMarkers(lng=~lng, lat=~lat, popup=~tag)
+  addMarkers(lng=~lng, lat=~lat, popup=~tag, clusterOptions = markerClusterOptions())
   
   
 ```
