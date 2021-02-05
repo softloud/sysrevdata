@@ -232,6 +232,8 @@ Now we have the long data in the same condensed format as the wide data in the s
 
 ## formatting for output
 
+We can format the database into a nice, readable format by converting it into an html output designed for human readability.
+
 ```{r}
 condensed_buffer_example %>% 
   # converts dataframe to an html output table
@@ -243,7 +245,7 @@ condensed_buffer_example %>%
 
 ```
 
-We can present this with a separate table of metadata, using the short title as the reference. We'll combine the Google Scholar link with the title.
+The formatting still isn't perfect because the cell values are long, and the URLs that we've included to Google Scholar are unwieldy. We can present this with a separate table of metadata, using the short title as the reference. We'll combine the Google Scholar link with the title.
 
 ```{r}
 study_descriptions <-
