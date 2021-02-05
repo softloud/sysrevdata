@@ -1,10 +1,10 @@
 ---
-title: "narrative"
+title: "Narrative synthsis table"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{narrative}
+  %\VignetteIndexEntry{Narrative synthsis table}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
