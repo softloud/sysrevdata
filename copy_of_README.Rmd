@@ -1,0 +1,76 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# sysrevdata
+
+<!-- badges: start -->
+<!-- [![Travis build status](https://travis-ci.com/softloud/sysrevdata.svg?branch=master)](https://travis-ci.com/softloud/sysrevdata) -->
+<!-- badges: end -->
+
+The goal of sysrevdata is to provide examples and extensible toolchains for structuring data for systematic review. 
+
+See vignettes (click on the "Articles" tab above) for example toolchain walkthroughs.
+
+## Vignettes
+
+- Narrative synthesis table | Condensed summaries of data for human interpretation
+- Machine readable data for complex visualisations and analyses | Structuring data for machine interpretation
+
+## Example dataset
+
+This package currently contains `bufferstrips` dataset from a published systematic review. 
+
+```{r}
+library(sysrevdata)
+
+# take a peek at the first 10 rows, 
+# restricted to first 5 columns, 
+# of each dataset
+
+bufferstrips %>%
+  # select first five columns
+  dplyr::select(1:5) %>% 
+  # select first 10 rows
+  head(10)
+
+```
+
+
+See
+
+- `?bufferstrips`
+
+for more details.
+
+## Installation
+
+You can install 
+<!-- the released version of sysrevdata from [CRAN](https://CRAN.R-project.org) with: -->
+
+<!-- ``` r -->
+<!-- install.packages("sysrevdata") -->
+<!-- ``` -->
+
+<!-- And  -->
+the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("softloud/sysrevdata")
+```
+
+# Contributing to this 
+
+This is work that extended from ideas generated at the [Evidence Synthesis Hackathon](https://www.eshackathon.org/); it is the voluntary work of open scientists who welcome contributions. If you have an idea for an improvement or extension, please consider contributing a pull request or opening an [issue](https://github.com/softloud/sysrevdata/issues). 

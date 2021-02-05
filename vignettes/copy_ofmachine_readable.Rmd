@@ -1,0 +1,217 @@
+---
+title: "machine readable"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{machine readable}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<style>
+u.dotted{
+  border-bottom: 1px dashed #999;
+  text-decoration: none; 
+}
+</style>
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(tippy)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+# packages used in this walkthrough
+library(sysrevdata)
+library(tidyverse)
+library(leaflet)
+library(tippy)
+
+# this avoids tidyverse conflicts with the base function filter
+conflicted::conflict_prefer("filter", "dplyr")
+```
+
+## complex visualisations and analysis
+
+Along with a narrative synthesis, systematic reviews and maps typically require complex visualisations. In addition, it is common for review authors to upgrade a systematic map into one or more focused systematic reviews, which may involve <u class="dotted">`r tippy("quantitative synthesis", "<span style='font-size:14px;'>e.g. meta-analysis or meta-regression</span>")`</u>. Before this can happen, review authors need to convert their database of studies from a condensed or wide format into a format that is ready for analysis. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
+
+This is the ideal way to share data for future syntheses, as it is machine readable for multiple analyses. It also explicitly separates connected data, rather than compressing multiple methods and outcomes onto a single line, losing links between columns. In this long version, each linkage between populations, interventions, comparators, outcomes, study methods, etc. is preserved explicitly on a separate row - a row of independent data.
+
+In this walkthrough, we'll consider the `bufferstrips` dataset, which starts of as wide-formatted (each level of each variable is presented as a separate column). 
+
+```{r, message=FALSE, warning=FALSE}
+# spatial variables
+buffer_example %>% 
+  select(short_title, contains("spatial"))
+```
+
+
+## wide to long
+
+We want to convert these wide data to long-form data, dropping the <u class="dotted">`r tippy("NA","<span style='font-size:14px;'>'Not applicable, displayed when a cell is empty or blank'</span>")`</u> elements and producing a table where each row contains a unique <u class="dotted">`r tippy("level", "<span style='font-size:14px;'>Also referred to as 'code' or 'subcategory''</span>")`</u> of each <u class="dotted">`r tippy("factor", "<span style='font-size:14px;'>Also referred to as 'variable' or 'category'</span>")`</u> for each study.
+
+We'll use the collection of variables we obtained in the [creating a narrative synthesis table vignette](narrative.html). 
+
+```{r, message=FALSE, warning=FALSE}
+buffer_variables
+```
+
+Here's one way of transforming the data to long format. 
+
+```{r, message=FALSE, warning=FALSE}
+buffer_example_long <-
+  buffer_example %>%
+  # this function pivots longer
+  pivot_longer(
+    # see the narrative vignette for how this vector was created
+    cols = contains(buffer_variables),
+    # name of column we will put the column names of the wide data
+    names_to = "category_type",
+    # name of column we will put the values of those columns in
+    values_to = "subcategory_value",
+    # drop the NA values
+    values_drop_na = TRUE
+  ) %>%
+  # I suspect there's a tidy solution to this. However, finding a regex solution 
+  # was just as useful. There is a lot of string manipulation and extraction in 
+  # evisynth that is not pivoting. 
+  mutate(
+      subcategory_type = map_chr(
+    category_type,
+    .f = function(x){ifelse(
+    str_detect(x, "_"),
+    str_match(x, "_(\\w+)") %>% pluck(2),
+    NA
+  )}),
+    category_type = if_else(
+    # extract the prefix of the column names with _
+    str_detect(category_type, "_"),
+    str_extract(category_type, "[a-z]*"),
+    category_type
+  )
+  )
+
+# newly created columns
+buffer_example_long %>%
+  select(short_title, category_type, subcategory_type, subcategory_value)
+
+```
+
+```{r eval=FALSE, include=FALSE}
+usethis::use_data(buffer_example_long, overwrite=TRUE)
+```
+
+
+## condensed to long
+
+Suppose, however, that we began with condensed data, as we created in the [creating a narrative synthesis table vignette](narrative.html). 
+
+```{r, message=FALSE, warning=FALSE}
+condensed_buffer_example
+```
+
+We want to take these data and create the same long-format we have above.
+
+```{r message=FALSE, warning=FALSE}
+condensed_buffer_example %>% 
+  pivot_longer(
+    contains(buffer_variables),
+    names_to = "category_type",
+    values_to = "subcategory_value"
+  ) %>% 
+  separate(subcategory_value,
+           # there are a maximum of 8 different subcategories
+           into = letters[1:8],
+           sep = "; ") %>% 
+  pivot_longer(letters[1:8],
+               values_to = "subcategory_value") %>%
+  # get rid of nas
+  filter(!is.na(subcategory_value)) %>%
+  # drop redundant column
+  select(-name) %>% 
+  # from here is just for display
+  select(short_title, category_type, subcategory_value)
+
+
+```
+
+## summarising
+
+Now we have our data in long-form, we can perform various analyses, including (if we wanted to) meta-analysis on extracted full quantitative data from each study.
+
+We might be interested in the number of countries in the systematic review, in which case we can use the original data where each row is a study (and studies are the independent data needed when we look at countries: each study was conducted in a specific country, so long data aren't necessary yet).
+
+```{r, message=FALSE, warning=FALSE}
+bufferstrips %>% 
+  count(study_country)
+```
+
+But to see the number of, say, observations in the farming production system, we will use our long data.
+
+```{r, message=FALSE, warning=FALSE}
+buffer_example_long %>%
+  filter(category_type == "farmingproductionsystem") %>%
+  count(subcategory_value)
+  
+  
+```
+
+## creating evidence atlases
+
+For creating <u class="dotted">`r tippy("evidence atlases", "<span style='font-size:14px;'>Evidence atlases are interactive geographical representations of spatially explicit information, and a common visualisation for systematic maps</span>")`</u> we need the data in the wide-format with one row per study. Our `bufferstrips` dataset is in the wide format already so lets try and reconfigure a wide database from the long formatted data that we created above.
+
+## back to wide
+
+```{r, message=FALSE, warning=FALSE}
+back_to_wide <-
+  buffer_example_long %>% 
+  pivot_wider(
+    id_cols = -contains("category"),
+    names_from = c(category_type, subcategory_type),
+    names_sep = "_",
+    values_from = subcategory_value
+  ) 
+
+```
+
+We can use a wide formatted dataset to plot a cartographic map of the study locations for example.
+
+```{r, eval=FALSE,message=FALSE, warning=FALSE}
+back_to_wide %>% 
+  select(short_title,latitute, longitude, google_scholar_link) %>% 
+  mutate(lat=as.numeric(latitute)) %>% 
+  mutate(lng=as.numeric(longitude)) %>% 
+  mutate(tag = paste0("Scholar_link: <a href=", google_scholar_link,">", google_scholar_link, "</a>")) %>% 
+  leaflet(width = "100%") %>% 
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=~lng, lat=~lat, popup=~tag, clusterOptions = markerClusterOptions())
+
+```
+
+The code above is just applied to a subset of the data but we can apply the same code to our bufferstrips dataframe. 
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+map<-sysrevdata::bufferstrips %>% 
+  select(short_title,latitute, longitude, google_scholar_link) %>% 
+  mutate(lat=as.numeric(latitute)) %>% 
+  mutate(lng=as.numeric(longitude)) %>% 
+  mutate(tag = paste0("Scholar_link: <a href=", google_scholar_link,">", google_scholar_link, "</a>"))
+
+# you might need to tidy up the encoding in the dataframe to get it to work with leaflet 
+Encoding(x = map$tag) <- "UTF-8"
+
+# replace all non UTF-8 character strings with an empty space
+map$tag <-
+  iconv( x = map$tag,
+          from = "UTF-8"
+         , to = "UTF-8"
+         , sub = "" )
+
+map %>% leaflet(width = "100%") %>% 
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=~lng, lat=~lat, popup=~tag, clusterOptions = markerClusterOptions())
+
+```
+
