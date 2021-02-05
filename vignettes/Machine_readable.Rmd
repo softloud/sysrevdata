@@ -1,10 +1,10 @@
 ---
-title: "Machine readable"
+title: "machine readable"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Machine readable}
+  %\VignetteIndexEntry{machine readable}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -35,7 +35,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 
 ## complex visualisations and analysis
 
-Along with a narrative synthesis, systematic reviews and maps typically require complex visualisations. In addition, it is common for review authors to upgrade a systematic map into one or more focused systematic reviews, which may involve <u class="dotted">`r tippy("quantitative synthesis", "<span style='font-size:20px;'>e.g. meta-analysis or meta-regression</span>")`</u>. Before this can happen, review authors need to convert their database of studies from a condensed or wide format into a format that is ready for analysis. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
+Along with a narrative synthesis, systematic reviews and maps typically require complex visualisations. In addition, it is common for review authors to upgrade a systematic map into one or more focused systematic reviews, which may involve <u class="dotted">`r tippy("quantitative synthesis", "<span style='font-size:14px;'>e.g. meta-analysis or meta-regression</span>")`</u>. Before this can happen, review authors need to convert their database of studies from a condensed or wide format into a format that is ready for analysis. The easiest way to do this is to produce a **long** or **tidy** format, one variable per study per row. 
 
 This is the ideal way to share data for future syntheses, as it is machine readable for multiple analyses. It also explicitly separates connected data, rather than compressing multiple methods and outcomes onto a single line, losing links between columns. In this long version, each linkage between populations, interventions, comparators, outcomes, study methods, etc. is preserved explicitly on a separate row - a row of independent data.
 
@@ -50,7 +50,7 @@ buffer_example %>%
 
 ## wide to long
 
-We want to convert these wide data to long-form data, dropping the <u class="dotted">`r tippy("NA", "Not applicable, displayed when a cell is empty or blank")`</u> elements and producing a table where each row contains a unique <u class="dotted">`r tippy("level", "Also referred to as 'code' or 'subcategory''")`</u> of each <u class="dotted">`r tippy("factor", "Also referred to as 'variable' or 'category'")`</u> for each study.
+We want to convert these wide data to long-form data, dropping the <u class="dotted">`r tippy("NA","<span style='font-size:14px;'>'Not applicable, displayed when a cell is empty or blank'</span>")`</u> elements and producing a table where each row contains a unique <u class="dotted">`r tippy("level", "<span style='font-size:14px;'>Also referred to as 'code' or 'subcategory''</span>")`</u> of each <u class="dotted">`r tippy("factor", "<span style='font-size:14px;'>Also referred to as 'variable' or 'category'</span>")`</u> for each study.
 
 We'll use the collection of variables we obtained in the [creating a narrative synthesis table vignette](narrative.html). 
 
@@ -160,7 +160,7 @@ buffer_example_long %>%
 
 ## creating evidence atlases
 
-For creating <u class="dotted">`r tippy("evidence atlases", "Evidence atlases are interactive geographical representations of spatially explicit information, and a common visualisation for systematic maps")`</u> we need the data in the wide-format with one row per study. Our `bufferstrips` dataset is in the wide format already so lets try and reconfigure a wide database from the long formatted data that we created above.
+For creating <u class="dotted">`r tippy("evidence atlases", "<span style='font-size:14px;'>Evidence atlases are interactive geographical representations of spatially explicit information, and a common visualisation for systematic maps</span>")`</u> we need the data in the wide-format with one row per study. Our `bufferstrips` dataset is in the wide format already so lets try and reconfigure a wide database from the long formatted data that we created above.
 
 ## back to wide
 
@@ -178,7 +178,7 @@ back_to_wide <-
 
 We can use a wide formatted dataset to plot a cartographic map of the study locations for example.
 
-```{r, message=FALSE, warning=FALSE}
+```{r, eval=FALSE,message=FALSE, warning=FALSE}
 back_to_wide %>% 
   select(short_title,latitute, longitude, google_scholar_link) %>% 
   mutate(lat=as.numeric(latitute)) %>% 
@@ -187,7 +187,31 @@ back_to_wide %>%
   leaflet(width = "100%") %>% 
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addMarkers(lng=~lng, lat=~lat, popup=~tag, clusterOptions = markerClusterOptions())
-  
-  
+
+```
+
+The code above is just applied to a subset of the data but we can apply the same code to our bufferstrips dataframe. 
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+map<-sysrevdata::bufferstrips %>% 
+  select(short_title,latitute, longitude, google_scholar_link) %>% 
+  mutate(lat=as.numeric(latitute)) %>% 
+  mutate(lng=as.numeric(longitude)) %>% 
+  mutate(tag = paste0("Scholar_link: <a href=", google_scholar_link,">", google_scholar_link, "</a>"))
+
+# you might need to tidy up the encoding in the dataframe to get it to work with leaflet 
+Encoding(x = map$tag) <- "UTF-8"
+
+# replace all non UTF-8 character strings with an empty space
+map$tag <-
+  iconv( x = map$tag,
+          from = "UTF-8"
+         , to = "UTF-8"
+         , sub = "" )
+
+map %>% leaflet(width = "100%") %>% 
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=~lng, lat=~lat, popup=~tag, clusterOptions = markerClusterOptions())
+
 ```
 

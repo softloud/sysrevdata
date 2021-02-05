@@ -12,7 +12,8 @@
 The goal of sysrevdata is to provide examples and extensible toolchains
 for structuring data for systematic review.
 
-See vignettes for example toolchain walkthroughs.
+See vignettes (click on the “Articles” tab above) for example toolchain
+walkthroughs.
 
 ## Vignettes
 
