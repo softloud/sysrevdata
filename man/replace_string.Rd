@@ -20,5 +20,7 @@ A dataframe with the string replaced.
 Replace a given string.
 }
 \examples{
+\dontrun{
 data <- replace_string(data, replace = 'NULL', with = '');
+}
 }

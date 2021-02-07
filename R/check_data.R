@@ -9,9 +9,11 @@
 #' found within the dataframe; and 2) a summary report describing the
 #' database separators.
 #' @examples
+#' \dontrun{
 #' v <- db_summary(data)
 #' v$report
-#' v$candidate_separators;
+#' v$candidate_separators
+#' }
 #' @export
 db_summary <- function(data,
                        value_sep = ';'){
@@ -53,7 +55,9 @@ db_summary <- function(data,
 #' and a column showing possible candidate separator (ie. non-alphanumeric)
 #' characters found within each column of the input data.
 #' @examples
+#' \dontrun{
 #' check_condensed(data, value_sep = ';');
+#' }
 #' @export
 check_condensed <- function(data,
                             value_sep = ';'){
@@ -77,7 +81,9 @@ check_condensed <- function(data,
 #' @param value_sep A character used to separate values within the data.
 #' @return Logical argument, TRUE or FALSE
 #' @examples
+#' \dontrun{
 #' is_condensed(columns, value_sep = ';');
+#' }
 #' @export
 is_condensed <- function(columns,
                          value_sep = ';'){
@@ -101,7 +107,9 @@ is_condensed <- function(columns,
 #' @param value_sep A character used to separate values within the data.
 #' @return Logical argument, TRUE or FALSE
 #' @examples
+#' \dontrun{
 #' is_long(columns, value_sep = ';');
+#' }
 #' @export
 is_long <- function(key_variable,
                     columns,
@@ -125,7 +133,9 @@ is_long <- function(key_variable,
 #' @param value_sep A character used to separate values within the data.
 #' @return Logical argument, TRUE or FALSE
 #' @examples
+#' \dontrun{
 #' is_wide(key_variable, columns, value_sep = ';');
+#' }
 #' @export
 is_wide <- function(key_variable,
                     columns,

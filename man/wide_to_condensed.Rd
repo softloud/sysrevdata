@@ -38,7 +38,9 @@ Convert from wide format to condensed format based on the prefix for
 each set of linked values across multiple columns.
 }
 \examples{
+\dontrun{
 column_stem <- 'hazard'
 condensed <- wide_to_condensed(data, column_stem, readable = TRUE)
 condensed;
+}
 }

@@ -37,6 +37,8 @@ each set of linked values across multiple columns. Two-step process goes from
 long to wide and then from wide to condensed.
 }
 \examples{
+\dontrun{
 condensed <- long_to_condensed(data, columns, readable = TRUE)
 condensed;
+}
 }

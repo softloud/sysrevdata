@@ -22,5 +22,7 @@ characters found within each column of the input data.
 Check dataframe for possible value separators
 }
 \examples{
+\dontrun{
 check_condensed(data, value_sep = ';');
+}
 }

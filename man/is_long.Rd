@@ -21,5 +21,7 @@ Checks whether key.variable is duplicated AND there are no separated
 values in coding variables and returns TRUE of FALSE.
 }
 \examples{
+\dontrun{
 is_long(columns, value_sep = ';');
+}
 }

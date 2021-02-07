@@ -27,7 +27,6 @@ library(tippy)
 library(sysrevdata)
 library(tidyverse)
 library(leaflet)
-library(tippy)
 
 # this avoids tidyverse conflicts with the base function filter
 conflicted::conflict_prefer("filter", "dplyr")
@@ -74,9 +73,7 @@ buffer_example_long <-
     # drop the NA values
     values_drop_na = TRUE
   ) %>%
-  # I suspect there's a tidy solution to this. However, finding a regex solution 
-  # was just as useful. There is a lot of string manipulation and extraction in 
-  # evisynth that is not pivoting. 
+ 
   mutate(
       subcategory_type = map_chr(
     category_type,
@@ -99,8 +96,9 @@ buffer_example_long %>%
 
 ```
 
+
 ```{r eval=FALSE, include=FALSE}
-usethis::use_data(buffer_example_long, overwrite=TRUE)
+usethis::use_data(buffer_example_long)
 ```
 
 

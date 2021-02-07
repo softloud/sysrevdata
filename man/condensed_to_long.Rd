@@ -22,10 +22,3 @@ A dataframe in 'long' format.
 Convert from condensed format to long format based on the presence
 of a given value separator within a given set of columns.
 }
-\examples{
-fpath <- system.file("extdata", "data.csv", package="sysrevdata")
-data <- read.csv(fpath)
-columns <- c('region', 'hazard', 'response', 'sdgs', 'actor')
-long_data <- condensed_to_long(data, columns, value_sep = 'xxx')
-long_data;
-}

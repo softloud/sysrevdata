@@ -25,7 +25,3 @@ A dataframe in 'wide' format.
 Convert from condensed format to wide format based on the presence
 of a given value separator within a given set of columns.
 }
-\examples{
-columns <- c('region', 'hazard', 'response', 'sdgs', 'actor')
-wide_data <- condensed_to_wide(data, columns, value_sep = 'xxx');
-}

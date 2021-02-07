@@ -61,7 +61,7 @@ buffer_example <-
 ```
 
 ```{r include=FALSE, eval=FALSE}
-usethis::use_data(buffer_example)
+usethis::use_data(buffer_example, overwrite = TRUE)
 ```
 
 
@@ -139,7 +139,7 @@ Our first task is to identify the columns that have common prefixes, that is, co
 ```
 
 ```{r include=FALSE, eval=FALSE}
-usethis::use_data(buffer_variables, overwrite = TRUE)
+usethis::use_data(buffer_variables)
 ```
 
 
@@ -186,7 +186,7 @@ condensed_buffer_example %>%
 ```
 
 ```{r include=FALSE, eval=FALSE}
-usethis::use_data(condensed_buffer_example, overwrite=TRUE)
+usethis::use_data(condensed_buffer_example, overwrite = TRUE)
 ```
 
 The output is a condensed datatable suitable for inclusion in a manuscript, with a minimum number of columns, no unnecessary white space, designed specifically to be easily digestible by the reader. In the interests of <u class="dotted">`r tippy("Open Data", "<span style='font-size:14px;'>'<em>Open data'</em> is the concept that research findings should be freely available to everyone to use as they wish, without restriction or control: Auer, S. R.; Bizer, C.; Kobilarov, G.; Lehmann, J.; Cyganiak, R.; Ives, Z. 2007. 'DBpedia: A Nucleus for a Web of Open Data'. The Semantic Web. Lecture Notes in Computer Science. 4825: 722. https://doi.org/10.1007/978-3-540-76298-0_52.</span>")`</u>, review authors should also make the underlying data freely accessible in a widely usable and easily understandable format, not solely in text form.
@@ -201,7 +201,7 @@ For this section, we'll use the long format of the `bufferstrips` dataset, using
 ```{r}
 buffer_example_long %>% 
   # in the interests of space, we'll just show the relevant columns
-  select(short_title, category, subcategory)
+  select(short_title, category_type, subcategory_type)
 
 
 ```
@@ -211,7 +211,7 @@ Now we'll <u class="dotted">`r tippy("pivot", "<span style='font-size:14px;'><em
 
 ```{r}
 # this function creates a string from the vector of multiple values
-# NB: it's entirely possible there's a way to do this using pivot_wider, but I haven't found it
+
 mash_subcategories <- function(x) {
   paste0(x, collapse = "; ")
 }
@@ -219,12 +219,12 @@ mash_subcategories <- function(x) {
 # go from long to wide
 buffer_example_long %>% 
   pivot_wider(
-    names_from = category,
-    values_from = subcategory,
+    names_from = category_type,
+    values_from = subcategory_value,
     values_fn = mash_subcategories
   ) %>% 
   # we'll just show a few examples because space
-  select(short_title, vegetated_strip_description, farmingproductionsystem)
+  select(short_title, vegetated, farmingproductionsystem)
 
 ```
 

@@ -25,6 +25,8 @@ Convert from wide format to long format based on the prefix for
 each set of linked values across multiple columns.
 }
 \examples{
+\dontrun{
 long <- wide_to_long(data, column_stem)
 long;
+}
 }

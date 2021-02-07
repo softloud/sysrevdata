@@ -9,8 +9,10 @@
 #' data. The default is set to ';'.
 #' @import magrittr
 #' @examples
+#' \dontrun{
 #' data <- data %>%
 #'     replace_sep(old_sep = 'xxx', new_sep = '; ');
+#'     }
 #' @export
 replace_sep <- function(data,
                         old_sep,
@@ -29,7 +31,9 @@ replace_sep <- function(data,
 #' default is set to ';'.
 #' @return Dataframe with whitespace removed.
 #' @examples
+#' \dontrun{
 #' data <- trim_spaces(data);
+#' }
 #' @export
 trim_spaces <- function(data,
                         value_sep = ';'){
@@ -50,7 +54,10 @@ trim_spaces <- function(data,
 #' @param with A string used to replace the above string.
 #' @return A dataframe with the string replaced.
 #' @examples
+#' \dontrun{
 #' data <- replace_string(data, replace = 'NULL', with = '');
+#' }
+#' @export
 replace_string <- function(data,
                            replace,
                            with){

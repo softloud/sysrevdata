@@ -22,7 +22,9 @@ Produce report on dataframe based on possible separators
 identified within each column.
 }
 \examples{
+\dontrun{
 v <- db_summary(data)
 v$report
-v$candidate_separators;
+v$candidate_separators
+}
 }

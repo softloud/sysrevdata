@@ -20,5 +20,7 @@ Remove 'unnecessary' whitespace (leading spaces and trailing
 spaces for each cell value and either side of a given separator).
 }
 \examples{
+\dontrun{
 data <- trim_spaces(data);
+}
 }

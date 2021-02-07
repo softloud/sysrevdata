@@ -20,6 +20,8 @@ Takes a given separator and replaces it with an alternative
 across the dataframe.
 }
 \examples{
+\dontrun{
 data <- data \%>\%
     replace_sep(old_sep = 'xxx', new_sep = '; ');
+    }
 }

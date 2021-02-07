@@ -5,7 +5,7 @@
 \alias{bufferstrips}
 \title{Bufferstrips dataset}
 \format{
-An object of class \code{spec_tbl_df} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 1072 rows and 84 columns.
+An object of class \code{spec_tbl_df} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 1074 rows and 183 columns.
 }
 \usage{
 bufferstrips

@@ -21,5 +21,7 @@ Checks whether key.variable is not duplicated AND there are no
 separated values in coding variables and returns TRUE of FALSE.
 }
 \examples{
+\dontrun{
 is_wide(key_variable, columns, value_sep = ';');
+}
 }

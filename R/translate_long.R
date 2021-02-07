@@ -11,7 +11,9 @@
 #' @importFrom magrittr '%>%'
 #' @return A dataframe in 'wide' format.
 #' @examples
+#' \dontrun{
 #' wide_data2 <- long_to_wide(long_data, columns, value_sep = 'xxx')
+#' }
 #' @export
 long_to_wide <- function(data,
                               columns,
@@ -52,8 +54,10 @@ long_to_wide <- function(data,
 #' @importFrom magrittr '%>%'
 #' @return A dataframe in 'condensed' format.
 #' @examples
+#' \dontrun{
 #' condensed <- long_to_condensed(data, columns, readable = TRUE)
 #' condensed;
+#' }
 #' @export
 long_to_condensed <- function(data,
                               columns,

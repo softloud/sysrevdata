@@ -25,9 +25,15 @@ Suggests:
     knitr,
     rmarkdown,
     here,
-    testthat
+    testthat,
+    tippy,
+    tidyverse,
+    kableExtra,
+    janitor,
+    leaflet,
+    conflicted
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
 Imports: 
     magrittr

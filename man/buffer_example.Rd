@@ -5,7 +5,7 @@
 \alias{buffer_example}
 \title{Example bufferstrips}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 5 rows and 84 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 5 rows and 183 columns.
 }
 \usage{
 buffer_example

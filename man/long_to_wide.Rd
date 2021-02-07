@@ -25,5 +25,7 @@ Convert from long format to wide format, with each level of a given
 column separated into a different column.
 }
 \examples{
+\dontrun{
 wide_data2 <- long_to_wide(long_data, columns, value_sep = 'xxx')
+}
 }

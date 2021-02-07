@@ -19,5 +19,7 @@ Checks if separator is present in given coding columns and returns
 TRUE or FALSE.
 }
 \examples{
+\dontrun{
 is_condensed(columns, value_sep = ';');
+}
 }
