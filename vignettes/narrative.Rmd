@@ -76,7 +76,7 @@ When we format these data (which we'll provide toolchains for at the end), the w
 
 ```{r echo=FALSE}
 buffer_example %>%
-  mutate(across(everything(), replace_na, "")) %>%
+  mutate(across(where(is.character), replace_na, "")) %>%
   select(short_title, contains("spatial")) %>%
   kable() 
 ```
